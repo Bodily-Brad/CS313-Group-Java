@@ -1,0 +1,5 @@
+package scriptures.model;
+
+public interface ScriptureDataHandler {
+	public List<Scripture> getFavoriteScriptures();
+}
