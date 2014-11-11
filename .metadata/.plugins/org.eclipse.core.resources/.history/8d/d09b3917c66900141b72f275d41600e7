@@ -4,9 +4,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>CS313 - 8.02</title>
+<title>CS313 - 8.02: Welcome Page</title>
 </head>
 <body>
-
+	Welcome ${loggedInUser}.<br>
+	<a href="LogoutUser">Logout Link Needs Implemented</a>
 </body>
 </html>
