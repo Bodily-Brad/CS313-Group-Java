@@ -36,5 +36,19 @@ public class Scripture {
 	{
 		return book + " " + chapter + ":" + verse;
 	}
+	
+	public void loadFromFileString(String str)
+	{
+		String[] parts = str.split(",");
+		
+		book = parts[0];
+		chapter = Integer.parseInt(parts[1]);
+		verse = Integer.parseInt(parts[2]);
+	}
+	
+	public String toFileString()
+	{
+		return book + "," + chapter + "," + verse;
+	}
 
 }

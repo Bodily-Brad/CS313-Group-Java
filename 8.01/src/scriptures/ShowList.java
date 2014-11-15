@@ -1,12 +1,16 @@
 package scriptures;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import scriptures.model.FileScriptureHandler;
 import scriptures.model.HardCodedScriptureHandler;
+import scriptures.model.ScriptureDataHandler;
 
 /**
  * Servlet implementation class ShowList
@@ -28,7 +32,7 @@ public class ShowList extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HardCodedScriptureHandler handler = new HardCodedScriptureHandler();
+		ScriptureDataHandler handler = new FileScriptureHandler("c:\\temp\\list.txt");
 		
 		// Pass as attribute
 		request.setAttribute("scriptures", handler.getFavoriteScriptures());
