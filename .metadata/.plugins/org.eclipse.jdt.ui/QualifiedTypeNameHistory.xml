@@ -2,4 +2,8 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="scriptures.model.Scripture"/>
+<fullyQualifiedTypeName name="java.io.BufferedWriter"/>
+<fullyQualifiedTypeName name="java.io.FileWriter"/>
+<fullyQualifiedTypeName name="scriptures.model.ScriptureDataHandler"/>
+<fullyQualifiedTypeName name="scriptures.model.FileScriptureHandler"/>
 </qualifiedTypeNameHistroy>
