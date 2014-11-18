@@ -1,6 +1,7 @@
 package movies;
 
 import java.io.IOException;
+
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,7 +28,13 @@ public class SearchMovies extends HttpServlet implements Servlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// TODO Get Search Results from OMDb API
+		
+		// Get parameters from form
+		String title = request.getParameter("title");
+		String view = request.getParameter("view");		// will be set to 'detail' if we need to get details for a specific movie
+		
+		
 	}
 
 	/**
