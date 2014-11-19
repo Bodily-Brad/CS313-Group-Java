@@ -37,22 +37,32 @@ public class SearchMovies extends HttpServlet implements Servlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Get Results from OMDb API
-		
-		// Get parameters from form
-		String title = request.getParameter("title");
-		title = title.replace(" ", "+");
+
 		String view = "search";									// will be set to 'detail' if we need to get details for a specific movie
 		
         if (request.getParameterMap().containsKey("view")) {
             view = request.getParameter("view");
         }
+        
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> map;
+		
+		String urlString;
 		
 		switch (view)
 		{
 			// Get specific movie details
 			case "detail":
-				// TODO: Get movie details from API
+				// Get Parameters from form
+				String imdbID = request.getParameter("imdbID");
+				urlString = "http://www.omdbapi.com/?plot=full&r=json";
+				urlString += "&i=" + imdbID;
+				
+
+				map = mapper.readValue(new URL(urlString), Map.class);
+				
+				// Pass map to details page
+				request.setAttribute("results", map);				
 				
 				// Show Detail view
 				request.getRequestDispatcher("/detail.jsp").forward(request, response);				
@@ -60,10 +70,13 @@ public class SearchMovies extends HttpServlet implements Servlet {
 
 			// Search for movies based off title string
 			default:
-				// TODO: Get search results from API
+				// Get parameters from form
+				String title = request.getParameter("title");
+				if (title.equals("")) title = "The Princess Bride";
+				title = title.replace(" ", "+");
 				
 				// Create URL string
-				String urlString = "http://www.omdbapi.com/?plot=short&r=json";
+				urlString = "http://www.omdbapi.com/?plot=short&r=json";
 				urlString += "&s=" + title;
 				
 				Boolean useJackson = true;
@@ -71,8 +84,7 @@ public class SearchMovies extends HttpServlet implements Servlet {
 				if (useJackson)
 				{
 					// Get JSON from OMDb (this DOES use Jackson libs)
-					ObjectMapper mapper = new ObjectMapper();
-					Map<String, Object> map = mapper.readValue(new URL(urlString), Map.class);
+					map = mapper.readValue(new URL(urlString), Map.class);
 					List list = (List)map.get("Search");	
 					
 					// Convert Jackson mapped list to 'regular' Java List
