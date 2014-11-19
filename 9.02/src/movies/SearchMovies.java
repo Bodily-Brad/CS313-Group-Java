@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -61,9 +63,9 @@ public class SearchMovies extends HttpServlet implements Servlet {
 				
 				// Create URL
 				String urlString = "http://www.omdbapi.com/?plot=short&r=json";
-				urlString += "&t=" + title;
+				urlString += "&s=" + title;
 				
-				// Get JSON from OMDb
+				// Get JSON from OMDb (this does not use the Jackson libs)
 				URL jsonReq = new URL(urlString);
 				URLConnection urlConnection = jsonReq.openConnection();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -76,17 +78,15 @@ public class SearchMovies extends HttpServlet implements Servlet {
 			   
 				reader.close();
 
-				System.out.println(recvbuff);				
+				System.out.println(recvbuff);
 				
+				// Get JSON from OMDb (this DOES use Jackson libs)
+				ObjectMapper mapper = new ObjectMapper();
+				Map<String, Object> map = mapper.readValue(new URL(urlString), Map.class);
+				List results = (List)map.get("Search");			
 				
 
-				// TODO: Uncomment the line below to pass 'results'
-				// to the search form as a parameter named "results"
-				// that it will use to display the search results
-				// (assuming we store our search results in a 'results'
-				// variable.
-
-				// request.setAttribute("results", results);
+				request.setAttribute("results", results);
 				
 				// Show Search view
 				request.getRequestDispatcher("/search.jsp").forward(request, response);
