@@ -17,7 +17,7 @@
 		<c:if test="${results != null && !results.isEmpty()}">
 		<h2>Search Results</h2>
 		<c:forEach var="result" items="${results}">
-			<strong>${result.Title}</strong> <a href="SearchMovies?view=detail&imdbID=${result.imdbID}">Details</a><br>
+			<strong>${result.Title}</strong> (${result.Year}) <a href="SearchMovies?view=detail&imdbID=${result.imdbID}">Details</a><br>
 		</c:forEach>		
 	</c:if>	
 </body>
