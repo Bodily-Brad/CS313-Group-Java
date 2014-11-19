@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,32 +62,45 @@ public class SearchMovies extends HttpServlet implements Servlet {
 			default:
 				// TODO: Get search results from API
 				
-				// Create URL
+				// Create URL string
 				String urlString = "http://www.omdbapi.com/?plot=short&r=json";
 				urlString += "&s=" + title;
 				
-				// Get JSON from OMDb (this does not use the Jackson libs)
-				URL jsonReq = new URL(urlString);
-				URLConnection urlConnection = jsonReq.openConnection();
-				BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-
-				String recv;
-				String recvbuff = "";
-			   
-				while ((recv = reader.readLine()) != null)
-					recvbuff += recv;
-			   
-				reader.close();
-
-				System.out.println(recvbuff);
+				Boolean useJackson = true;
 				
-				// Get JSON from OMDb (this DOES use Jackson libs)
-				ObjectMapper mapper = new ObjectMapper();
-				Map<String, Object> map = mapper.readValue(new URL(urlString), Map.class);
-				List results = (List)map.get("Search");			
-				
+				if (useJackson)
+				{
+					// Get JSON from OMDb (this DOES use Jackson libs)
+					ObjectMapper mapper = new ObjectMapper();
+					Map<String, Object> map = mapper.readValue(new URL(urlString), Map.class);
+					List list = (List)map.get("Search");	
+					
+					// Convert Jackson mapped list to 'regular' Java List
+					List<Object> results = new ArrayList<Object>();
+					for (Object item : list)
+					{
+						results.add(item);
+					}
+					
+					request.setAttribute("results", results);
+				}
+				else
+				{
+					// Get JSON from OMDb (this does not use the Jackson libs)
+					URL jsonReq = new URL(urlString);
+					URLConnection urlConnection = jsonReq.openConnection();
+					BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 
-				request.setAttribute("results", results);
+					String recv;
+					String recvbuff = "";
+				   
+					while ((recv = reader.readLine()) != null)
+						recvbuff += recv;
+				   
+					reader.close();
+
+					System.out.println(recvbuff);					
+				}
 				
 				// Show Search view
 				request.getRequestDispatcher("/search.jsp").forward(request, response);

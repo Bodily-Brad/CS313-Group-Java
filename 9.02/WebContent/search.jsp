@@ -16,6 +16,9 @@
 		<!-- Search Results -->
 		<c:if test="${results != null && !results.isEmpty()}">
 		<h2>Search Results</h2>
+		<c:forEach var="result" items="${results}">
+			<strong>${result.Title}</strong><br>
+		</c:forEach>		
 	</c:if>	
 </body>
 </html>
