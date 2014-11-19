@@ -1,6 +1,10 @@
 package movies;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -34,6 +38,7 @@ public class SearchMovies extends HttpServlet implements Servlet {
 		
 		// Get parameters from form
 		String title = request.getParameter("title");
+		title = title.replace(" ", "+");
 		String view = "search";									// will be set to 'detail' if we need to get details for a specific movie
 		
         if (request.getParameterMap().containsKey("view")) {
@@ -53,6 +58,26 @@ public class SearchMovies extends HttpServlet implements Servlet {
 			// Search for movies based off title string
 			default:
 				// TODO: Get search results from API
+				
+				// Create URL
+				String urlString = "http://www.omdbapi.com/?plot=short&r=json";
+				urlString += "&t=" + title;
+				
+				// Get JSON from OMDb
+				URL jsonReq = new URL(urlString);
+				URLConnection urlConnection = jsonReq.openConnection();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+				String recv;
+				String recvbuff = "";
+			   
+				while ((recv = reader.readLine()) != null)
+					recvbuff += recv;
+			   
+				reader.close();
+
+				System.out.println(recvbuff);				
+				
 				
 
 				// TODO: Uncomment the line below to pass 'results'
