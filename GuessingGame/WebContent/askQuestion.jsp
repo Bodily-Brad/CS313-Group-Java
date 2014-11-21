@@ -20,10 +20,11 @@
 						<input type='hidden' name='questionID' value='${param.questionID }'>
 						<input type='submit' value='${answer.GetText()}'>
 					</form>
-					
-				</c:forEach>				
+				</c:forEach>
+				<br>				
 			</div>
 		</div>
+		<div class='gameNote'><a href="?action=End">Start Over</a></div>
 	</div>
 </body>
 </html>
