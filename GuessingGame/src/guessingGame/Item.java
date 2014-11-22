@@ -12,7 +12,7 @@ public class Item extends dbObject {
 	protected static String defaultSearchField = "description";
 	protected static String defaultSortField = "description";
 	
-	// Constructor
+	// Constructors
 	public Item(int itemID, String description)
 	{
 		this.itemID = itemID;

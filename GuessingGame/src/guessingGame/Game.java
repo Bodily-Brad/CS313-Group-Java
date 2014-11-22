@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Game {
 
@@ -12,6 +13,7 @@ public class Game {
 	protected static String GAMESTATE_KEY = "gamestate";
 	protected static String QUESTIONS_LEFT_KEY = "questionsLeft";
 	protected static String QUESTIONS_LIST_KEY = "questionsAnswered";
+	protected static int STARTING_QUESTIONS = 20;
 	
 	// These may become an Enum instead
 	public static String GAMESTATE_STARTED = "GAMESTATE_STARTED";
@@ -19,16 +21,15 @@ public class Game {
 	public static String GAMESTATE_FINISH_CORRECT = "GAMESTATE_FINISH_CORRECT";
 	public static String GAMESTATE_FINISH_INCORRECT = "GAMESTATE_FINISH_INCORRECT";
 	
-	
 	// "Properties"
-	public static String getGameState(HttpSession session)
+	public static GameState getGameState(HttpSession session)
 	{
-		String gameState = (String)session.getAttribute(GAMESTATE_KEY);
-		return gameState;
+		GameState state = (GameState)session.getAttribute(GAMESTATE_KEY);
+		return state;
 	}
-	public static void setGameState(HttpSession session, String value)
+	public static void setGameState(HttpSession session, GameState gameState)
 	{
-		session.setAttribute(GAMESTATE_KEY, value);
+		session.setAttribute(GAMESTATE_KEY, gameState);
 	}
 	
 	public static int getQuestionsLeft(HttpSession session)
@@ -40,30 +41,66 @@ public class Game {
 		session.setAttribute(QUESTIONS_LEFT_KEY, value);
 	}
 	
-	public static Object getQuestionsAnswered(HttpSession session)
+	public static Map<Integer, Integer> getQuestionsAnswered(HttpSession session)
 	{
-		return null;
+		return (Map<Integer, Integer>)session.getAttribute(QUESTIONS_LIST_KEY);
 	}
-	
-	public static void setQuestionsAnswered(HttpSession session, Object value)
+	public static void setQuestionsAnswered(HttpSession session, Map<Integer, Integer> questionsList)
 	{
-		session.setAttribute(QUESTIONS_LIST_KEY, value);
+		session.setAttribute(QUESTIONS_LIST_KEY, questionsList);
 	}
 	
 	// Methods
 	public static int AttemptSolve(HttpSession session)
 	{
-		setGameState(session, GAMESTATE_SOLVING);
+		setGameState(session, GameState.Solving);
 		
 		// Brute Method
 		List<Object> items = Item.LoadAllFromDatabase();
 		
-		ArrayList<Integer> confidences = new ArrayList<Integer>();
+		ArrayList<Float> confidences = new ArrayList<Float>();
 		
-		foreach (Object item : items)
+		for (Object obj : items)
 		{
-			// TODO: Implement confidence logic
+			Item item = (Item)obj;	// Cast Object to Item
+			
+			confidences.set(item.getItemID(), 0.0f);
+			
+			// Iterate through questions in answered questions array
+			Map<Integer, Integer> questionsAnswered = Game.getQuestionsAnswered(session);
+			for (int questionID : questionsAnswered.keySet())
+			{
+				int answerID = questionsAnswered.get(questionID);
+				
+				float count = Response.GetResponseCount(item.getItemID(), questionID, answerID);
+				float totalCount = Response.GetTotalResponsesByQuestionAndItem(questionID, item.getItemID());
+				float averageCount = totalCount / 4.0f;	// Hard set to 4 responses
+				
+				float increase = 0.0f;
+				if (averageCount > 0)
+					increase = (count / averageCount - 1.0f);
+				
+				float newConf = confidences.get(item.getItemID());
+				newConf += increase;
+				
+				confidences.set(item.getItemID(), newConf);
+			}
 		}
+		
+		// Find max confidence
+		int maxConfID = 0;
+		float maxConf = 0.0f;
+		
+		for (int i=0; i < confidences.size(); i++)
+		{
+			if (confidences.get(i) > maxConf)
+			{
+				maxConf = confidences.get(i);
+				maxConfID = i;
+			}
+		}
+		
+		return maxConfID;		
 	}
 	
 	public static void EndGame(HttpSession session)
@@ -71,6 +108,52 @@ public class Game {
 		setGameState(session, null);
 		setQuestionsLeft(session, -1);
 		setQuestionsAnswered(session, null);
+	}
+	
+	public static void FinishGameCorrect(HttpSession session, int itemID)
+	{
+		Game.setGameState(session, GameState.FinishCorrect);
+		Game.RecordPlayerResponses(session, itemID);
+	}
+	
+	public static void FinishGameInCorrect(HttpSession session)
+	{
+		Game.setGameState(session, GameState.FinishIncorrect);
+	}
+	
+	public static int GetRandomQuestionID(HttpSession session)
+	{
+		Map<Integer, Integer> askedQuestions = Game.getQuestionsAnswered(session);
+		// TODO: Implement 'get random question' logic
+		
+		return -1;
+	}
+	
+	public static void RecordAnswer(HttpSession session, int questionID, int answerID)
+	{
+		Map<Integer, Integer> questionsAnswered = Game.getQuestionsAnswered(session);
+		questionsAnswered.put(questionID, answerID);
+		
+		Game.setQuestionsAnswered(session, questionsAnswered);
+		Game.setQuestionsLeft(session, Game.getQuestionsLeft(session)-1);
+	}
+	
+	public static void RecordPlayerResponses(HttpSession session, int itemID)
+	{
+		Map<Integer, Integer> questionsAnswered = Game.getQuestionsAnswered(session);
+		
+		for (int questionID : questionsAnswered.keySet())
+		{
+			int answerID = questionsAnswered.get(questionID);
+			Response.IncrementCount(itemID, questionID, answerID);
+		}
+		
+	}
+	
+	public static void StartNewGame(HttpSession session)
+	{
+		Game.EndGame(session);
+		Game.setQuestionsLeft(session, STARTING_QUESTIONS);
 	}
 	
 }
