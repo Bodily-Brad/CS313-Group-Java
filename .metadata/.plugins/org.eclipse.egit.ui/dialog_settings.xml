@@ -14,6 +14,13 @@
 		<item value="1014" key="DIALOG_X_ORIGIN"/>
 		<item value="444" key="DIALOG_Y_ORIGIN"/>
 	</section>
+	<section name="org.eclipse.egit.ui.internal.merge.MergeResultDialog.dialogBounds">
+		<item value="1057" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="323" key="DIALOG_HEIGHT"/>
+		<item value="563" key="DIALOG_X_ORIGIN"/>
+		<item value="488" key="DIALOG_Y_ORIGIN"/>
+	</section>
 	<section name="org.eclipse.egit.ui.COMMIT_DIALOG_SECTION">
 		<item value="875" key="DIALOG_WIDTH"/>
 		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
@@ -29,5 +36,12 @@
 		<item value="541" key="DIALOG_HEIGHT"/>
 		<item value="654" key="DIALOG_X_ORIGIN"/>
 		<item value="343" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.egit.ui.internal.dialogs.MergeTargetSelectionDialog.dialogBounds">
+		<item value="875" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="859" key="DIALOG_HEIGHT"/>
+		<item value="654" key="DIALOG_X_ORIGIN"/>
+		<item value="131" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

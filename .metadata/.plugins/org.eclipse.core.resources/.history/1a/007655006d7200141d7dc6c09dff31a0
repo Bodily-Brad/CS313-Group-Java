@@ -1,0 +1,98 @@
+package guessingGame;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class Game {
+
+	// Class Variables
+	protected static String GAMESTATE_KEY = "gamestate";
+	protected static String QUESTIONS_LEFT_KEY = "questionsLeft";
+	protected static String QUESTIONS_LIST_KEY = "questionsAnswered";
+	
+	// These may become an Enum instead
+	public static String GAMESTATE_STARTED = "GAMESTATE_STARTED";
+	public static String GAMESTATE_SOLVING = "GAMESTATE_SOLVING";
+	public static String GAMESTATE_FINISH_CORRECT = "GAMESTATE_FINISH_CORRECT";
+	public static String GAMESTATE_FINISH_INCORRECT = "GAMESTATE_FINISH_INCORRECT";
+	
+	// "Properties"
+	public static GameState getGameState(HttpSession session)
+	{
+		GameState state = (GameState)session.getAttribute(GAMESTATE_KEY);
+		return state;
+	}
+	public static void setGameState(HttpSession session, GameState gameState)
+	{
+		session.setAttribute(GAMESTATE_KEY, gameState);
+	}
+	
+	public static int getQuestionsLeft(HttpSession session)
+	{
+		return (int)session.getAttribute(QUESTIONS_LEFT_KEY);
+	}
+	public static void setQuestionsLeft(HttpSession session, int value)
+	{
+		session.setAttribute(QUESTIONS_LEFT_KEY, value);
+	}
+	
+	public static Map<Integer, Integer> getQuestionsAnswered(HttpSession session)
+	{
+		return (Map<Integer, Integer>)session.getAttribute(QUESTIONS_LIST_KEY);
+	}
+	public static void setQuestionsAnswered(HttpSession session, Map<Integer, Integer> questionsList)
+	{
+		session.setAttribute(QUESTIONS_LIST_KEY, questionsList);
+	}
+	
+	// Methods
+	public static int AttemptSolve(HttpSession session)
+	{
+		setGameState(session, GameState.Solving);
+		
+		// Brute Method
+		List<Object> items = Item.LoadAllFromDatabase();
+		
+		ArrayList<Integer> confidences = new ArrayList<Integer>();
+		
+		for (Object obj : items)
+		{
+			Item item = (Item)obj;	// Cast Object to Item
+			
+			confidences.set(item.getItemID(), 0);
+			
+			// Iterate through questions in answered questions array
+			Map<Integer, Integer> questionsAnswered = Game.getQuestionsAnswered(session);
+			for (Integer questionID : questionsAnswered.keySet())
+			{
+				Integer answerID = questionsAnswered.get(questionID);
+				
+				Integer iCount = Response.GetResponseCount(item.getItemID(), questionID, answerID);
+				Float count = iCount;
+				Float totalCount = (Double)Response.GetTotalResponsesByQuestionAndItem(questionID, item.getItemID());
+				Float averageCount = totalCount / 4.0;	// Hard set to 4 responses
+				
+				Float increase = 0.0;
+				if (averageCount > 0)
+					increase = (count / averageCount - 1.0);
+				
+				
+			}
+			
+			
+			// TODO: Implement confidence logic
+		}
+	}
+	
+	public static void EndGame(HttpSession session)
+	{
+		setGameState(session, null);
+		setQuestionsLeft(session, -1);
+		setQuestionsAnswered(session, null);
+	}
+	
+}

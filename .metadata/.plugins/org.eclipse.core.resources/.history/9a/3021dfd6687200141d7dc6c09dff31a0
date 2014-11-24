@@ -1,0 +1,63 @@
+package guessingGame;
+
+public class Response extends dbObject
+{
+	// Local Variables
+	private Integer itemID;
+	private Integer questionID;
+	private Integer answerID;
+	private Integer count;
+	
+	// Protected Member
+	protected static String tableName = "responses";
+	protected static String keyName = "responseID";
+	protected static String defaultSearchField = "responseID";
+	protected static String defaultSortField = "responseID";
+	
+	// Constructors
+	public Response(Integer id, Integer itemID, Integer questionID, Integer AnswerID, Integer count)
+	{
+		this.key = id;
+		this.itemID = itemID;
+		this.questionID = questionID;
+		this.answerID = answerID;
+		this.count = count;
+	}
+	
+	public Response()
+	{
+		this.key = -1;
+		this.itemID = -1;
+		this.questionID = -1;
+		this.answerID = -1;
+		this.count = -1;
+	}
+	
+	// Properties
+	public Integer getAnswerID() { return this.answerID; }
+	public Integer getCount() { return this.count; }
+	public Integer getItemID() { return this.itemID; }
+	public Integer getQuestionID() { return this.questionID; }
+	
+	// Methods
+	public static Integer GetItemIDWithLowestResponseCount()
+	{
+		// TODO: Implement Database search
+		return -1;
+	}
+	
+	public static Integer GetQuestionIDWithLowestResponseCountForItem(Integer itemID)
+	{
+		// TODO: Implement Database search
+		return -1;
+	}
+	
+	public static Response GetResponseByCriteria(Integer itemID, Integer questionID, Integer answerID)
+	{
+		// TODO: Implement Database Search
+		return null;
+	}
+	
+	
+
+}

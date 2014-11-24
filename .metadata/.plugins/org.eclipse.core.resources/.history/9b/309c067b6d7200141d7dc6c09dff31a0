@@ -1,0 +1,49 @@
+package guessingGame;
+
+public class Question extends dbObject
+{	
+	// Local Variables
+	private String text;
+	
+	// Protected Members
+	protected static String tableName = "questions";
+	protected static String keyName = "questionID";
+	protected static String defaultSearchField = "text";
+	protected static String defaultSortField = "text";
+	
+	// Constructors
+	public Question(Integer id, String text)
+	{
+		this.key = id;
+		this.text = text;
+	}
+	
+	public Question()
+	{
+		this.key = -1;
+		this.text = null;
+	}
+
+	// Properties
+	public String getText() { return this.text; }
+	
+	// Methods
+	public static Boolean GetQuestionExistsByText(String text)
+	{
+		// TODO: Implement Database check
+		return false;
+	}
+	
+	public static Integer Insert(String text)
+	{
+		// TODO: Implement Insert
+		return -1;
+	}
+	
+	// Class Methods
+	public static Question CreateFromRecord(Object record)
+	{
+		// TODO: Implement Record-to-object
+		return null;
+	}
+}

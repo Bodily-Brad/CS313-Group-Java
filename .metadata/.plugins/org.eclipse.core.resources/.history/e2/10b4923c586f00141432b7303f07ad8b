@@ -1,0 +1,27 @@
+package guessingGame;
+
+public class Item extends dbObject {
+
+	// Local Variables
+	private int itemID;
+	private String description;
+	
+	// Protected Members
+	protected static String tableName = "items";
+	protected static String keyName = "itemID";
+	protected static String defaultSearchField = "description";
+	protected static String defaultSortField = "description";
+	
+	// Constructor
+	public Item(int itemID, String description)
+	{
+		this.itemID = itemID;
+		this.description = description;
+	}
+	
+	public Item()
+	{
+		this.itemID = null;
+		this.description = null;
+	}
+}

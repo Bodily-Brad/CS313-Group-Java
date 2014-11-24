@@ -1,0 +1,123 @@
+package guessingGame;
+
+public class Response extends dbObject
+{
+	// Local Variables
+	private Integer itemID;
+	private Integer questionID;
+	private Integer answerID;
+	private Integer count;
+	
+	// Protected Member
+	protected static String tableName = "responses";
+	protected static String keyName = "responseID";
+	protected static String defaultSearchField = "responseID";
+	protected static String defaultSortField = "responseID";
+	
+	// Constructors
+	public Response(Integer id, Integer itemID, Integer questionID, Integer AnswerID, Integer count)
+	{
+		this.key = id;
+		this.itemID = itemID;
+		this.questionID = questionID;
+		this.answerID = answerID;
+		this.count = count;
+	}
+	
+	public Response()
+	{
+		this.key = -1;
+		this.itemID = -1;
+		this.questionID = -1;
+		this.answerID = -1;
+		this.count = -1;
+	}
+	
+	// Properties
+	public Integer getAnswerID() { return this.answerID; }
+	public Integer getCount() { return this.count; }
+	public Integer getItemID() { return this.itemID; }
+	public Integer getQuestionID() { return this.questionID; }
+	
+	// Methods
+	public static Integer GetItemIDWithLowestResponseCount()
+	{
+		// TODO: Implement Database search
+		return -1;
+	}
+	
+	public static Integer GetQuestionIDWithLowestResponseCountForItem(Integer itemID)
+	{
+		// TODO: Implement Database search
+		return -1;
+	}
+	
+	public static Response GetResponseByCriteria(Integer itemID, Integer questionID, Integer answerID)
+	{
+		// TODO: Implement Database Search
+		return null;
+	}
+	
+	public static Integer GetResponseCount(Integer itemID, Integer questionID, Integer answerID)
+	{
+		Response response = GetResponseByCriteria(itemID, questionID, answerID);
+		if (response != null)
+			return response.getCount();
+		// Else
+		return 0;
+	}
+	
+	public static Boolean GetResponseExistsByCriteria(Integer itemID, Integer questionID, Integer answerID)
+	{
+		Response response = GetResponseByCriteria(itemID, questionID, answerID);
+		if (response != null)
+			return true;
+		// Else
+		return false;		
+	}
+	
+	public static Integer GetTotalResponsesByQuestionAndItem(Integer questionID, Integer itemID)
+	{
+		// TODO: Implement Database functions
+		return -1;
+	}
+	
+	public static Integer IncrementCount(Integer itemID, Integer questionID, Integer answerID)
+	{
+		// Check for existing response
+		Response response = GetResponseByCriteria(itemID, questionID, answerID);
+		if (response != null)
+		{
+			Integer count = response.getCount();
+			count++;
+			return Update(response.getKey(), count);
+		}
+		else
+		{
+			Integer count = 1;
+			return Insert(itemID, questionID, answerID, count);
+		}
+	}
+	
+	public static Integer Insert(Integer itemID, Integer questionID, Integer answerID, Integer count)
+	{
+		// TODO: Implement INSERT functionality
+		return -1;
+	}
+	
+	public static Integer Update(Integer id, Integer count)
+	{
+		// TODO: Implement UPDATE functionality
+		return -1;
+	}
+	
+	// Class Methods
+	protected static Response createFromRecord(Object record)
+	{
+		// TODO: Implement Record to Response
+		return null;
+	}
+	
+	
+
+}

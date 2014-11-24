@@ -1,0 +1,75 @@
+package guessingGame;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Game {
+
+	// Class Variables
+	protected static String GAMESTATE_KEY = "gamestate";
+	protected static String QUESTIONS_LEFT_KEY = "questionsLeft";
+	protected static String QUESTIONS_LIST_KEY = "questionsAnswered";
+	
+	// These may become an Enum instead
+	public static String GAMESTATE_STARTED = "GAMESTATE_STARTED";
+	public static String GAMESTATE_SOLVING = "GAMESTATE_SOLVING";
+	public static String GAMESTATE_FINISH_CORRECT = "GAMESTATE_FINISH_CORRECT";
+	public static String GAMESTATE_FINISH_INCORRECT = "GAMESTATE_FINISH_INCORRECT";
+	
+	// "Properties"
+	public static GameState getGameState(HttpSession session)
+	{
+		GameState state = (GameState)session.getAttribute(GAMESTATE_KEY);
+		return state;
+	}
+	public static void setGameState(HttpSession session, GameState gameState)
+	{
+		session.setAttribute(GAMESTATE_KEY, gameState);
+	}
+	
+	public static int getQuestionsLeft(HttpSession session)
+	{
+		return (int)session.getAttribute(QUESTIONS_LEFT_KEY);
+	}
+	public static void setQuestionsLeft(HttpSession session, int value)
+	{
+		session.setAttribute(QUESTIONS_LEFT_KEY, value);
+	}
+	
+	public static Object getQuestionsAnswered(HttpSession session)
+	{
+		return (Object)session.getAttribute(QUESTIONS_LIST_KEY);		
+	}
+	
+	public static void setQuestionsAnswered(HttpSession session, Object value)
+	{
+		session.setAttribute(QUESTIONS_LIST_KEY, value);
+	}
+	
+	// Methods
+	public static int AttemptSolve(HttpSession session)
+	{
+		setGameState(session, GameState.Solving);
+		
+		// Brute Method
+		List<Object> items = Item.LoadAllFromDatabase();
+		
+		ArrayList<Integer> confidences = new ArrayList<Integer>();
+		
+		for (Object item : items)
+		{
+			// TODO: Implement confidence logic
+		}
+	}
+	
+	public static void EndGame(HttpSession session)
+	{
+		setGameState(session, null);
+		setQuestionsLeft(session, -1);
+		setQuestionsAnswered(session, null);
+	}
+	
+}

@@ -1,0 +1,17 @@
+package guessingGame;
+
+public class Answer extends dbObject {
+	
+	// Local variables
+	private String text;
+	
+	// Protected Members
+	protected static String tableName = "answers";
+	
+	// Constructor
+	public Answer(int ID = null)
+	{
+		
+	}
+
+}

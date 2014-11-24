@@ -1,0 +1,69 @@
+package guessingGame;
+
+import java.util.List;
+
+// A bunch of this class needs implemented
+// but it's going to have to wait until we
+// cover JSP DB accesss
+public class dbObject {
+	
+	// Protected Static Members
+	protected static String tableName = "table";
+	protected static String keyName = "key";
+	protected static String defaultSearchField = "search";
+	protected static String defaultSortField = "sort";
+	
+	// Protected Members
+	protected int key;
+	
+	// Properties
+	public int getKey() { return key; }
+	
+	// Public Static Methods
+	
+	// This returns an Object for now. Once we know more
+	// about JSP database access, this will hopefully change
+	// to some sort of RecordSet object
+	public static Object LoadFromDatabase(String key)
+	{
+		return null;
+	}
+	
+	public static Object LoaddAllFromDatabase()
+	{
+		return LoadAllFromDatabase(null);
+	}
+	
+	public static Object LoadAllFromDatabase(List<String> excludedKeys)
+	{
+		return null;
+	}
+	
+	public static Object Search(String criteria)
+	{
+		return null;
+	}
+	
+	// Protected Static Methods
+	
+	protected static Object readRecord(String key)
+	{
+		return null;
+	}
+	
+	protected static List<Object> readRecords()
+	{
+		return readRecords(null);
+	}
+	
+	protected static List<Object> readRecords(List<String> excludedKeys)
+	{
+		return null;
+	}
+	
+	protected static List<Object> searchRecords(String criteria)
+	{
+		return null;
+	}
+	
+}
