@@ -40,6 +40,7 @@ public class Search extends HttpServlet {
 			}
 			catch(ClassNotFoundException ex) {
 			   System.out.println("Error: unable to load driver class!");
+			   System.out.println("Error: " + ex.getMessage());
 			   System.exit(1);
 			}
 		
@@ -72,7 +73,7 @@ public class Search extends HttpServlet {
 		}
 		catch(Exception e)
 		{
-			System.out.println("Error: unable to load driver class!");
+			System.out.println("Error: " + e.getMessage());
 			System.exit(1);
 		}
 		
