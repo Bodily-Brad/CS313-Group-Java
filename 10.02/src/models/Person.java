@@ -1,4 +1,4 @@
-package family;
+package models;
 
 public class Person {
 	int id;
@@ -6,7 +6,7 @@ public class Person {
 	String last;
 	String birthday;
 	
-	Person(int pid, String pfirst, String plast, String pbirthday)
+	public Person(int pid, String pfirst, String plast, String pbirthday)
 	{
 		id = pid;
 		first = pfirst;

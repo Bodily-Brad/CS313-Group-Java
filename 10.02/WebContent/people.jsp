@@ -24,11 +24,13 @@
 <body>
 
 	<h1>People Search</h1>
-      	 <c:forEach items="${list}" var="line">
-      		<a href="javascript:link('${line.getFirst()}', '${line.getLast()}' , '${line.getBirth()}');">${line.getFirst()} ${line.getLast()}</a><br/>
-       	 </c:forEach>
-       	 
-       	 
+		<c:forEach var="person" items="${people}">
+			${person.first} ${person.last}
+			<a href="Details?id=${person.id}">Details</a>
+			<br>
+		</c:forEach>
+
+
      <form action="details.jsp" method="Post"  id ="form" style="display:none">
 			<input type="text" name="first" id="first"><br>
 			<input type="text" name="last" id="last"><br>

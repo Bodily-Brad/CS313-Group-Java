@@ -13,13 +13,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Person;
+
 /**
  * Servlet implementation class Search
  */
 @WebServlet("/Search")
 public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	
+
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -32,25 +35,25 @@ public class Search extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<String> list = new ArrayList<String>();
+		List<Person> people = new ArrayList<Person>();
 		
 		//Load Driver
 		try {
 			   Class.forName("com.mysql.jdbc.Driver");
 			}
 			catch(ClassNotFoundException ex) {
-			   System.out.println("Error: unable to load driver class!");
 			   System.out.println("Error: " + ex.getMessage());
 			   System.exit(1);
 			}
 		
 		//Connect to Database
-		String URL = "jdbc:mysql://localhost/family_db";
+		String URL = "jdbc:mysql://localhost/familydb";
 		String USER = "team";
 		String PASS = "pass";
 		
 		try{
-			Connection conn = DriverManager.getConnection(URL, USER, PASS);
+			//Connection conn = DriverManager.getConnection(URL, USER, PASS);
+			Connection conn = DriverManager.getConnection(URL);
 			
 			//Get data set
 			 Statement stmt = conn.createStatement();
@@ -58,13 +61,20 @@ public class Search extends HttpServlet {
 		     String sql = "SELECT * FROM Person";
 		     ResultSet rs = stmt.executeQuery(sql);
 		     
+		     // Iterate through all records
 		     while(rs.next()){
-		         //Retrieve by column name
+		    	 
+		         // Get info to create Person object
+		    	 int personID = rs.getInt("person_id");
 		         String first = rs.getString("first_name");
 		         String last = rs.getString("last_name");
 		         String birth = rs.getString("birthday");
 		         
-		         list.add(first + " " + last);
+		         // Create new person
+		         Person newPerson = new Person(personID, first, last, birth);
+		         
+		         // Add person to return list
+		         people.add(newPerson);
 		     }
 		     
 		     //close conn
@@ -73,13 +83,13 @@ public class Search extends HttpServlet {
 		}
 		catch(Exception e)
 		{
+			// Display error message
 			System.out.println("Error: " + e.getMessage());
 			System.exit(1);
 		}
 		
-		request.setAttribute("list", list);
+		request.setAttribute("people", people);
 		request.getRequestDispatcher("/people.jsp").forward(request, response);	
-		
 	}
 
 	/**

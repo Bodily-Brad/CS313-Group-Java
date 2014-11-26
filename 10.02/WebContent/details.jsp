@@ -9,14 +9,10 @@
 </head>
 
 <body>
-	<%
-		String first = request.getParameter("first");
-		String last = request.getParameter("last");
-		String birth = request.getParameter("birth");
-		response.getWriter().write("<h1>Person Details</h1>");
-		response.getWriter().write("First Name: " + first + "<br>");
-		response.getWriter().write("Last Name: " + last + "<br>");
-		response.getWriter().write("Birthday: " + birth + "<br>");	
-	%>
+	<H1>Details</H1>
+	<strong>${person.first } ${person.last }</strong><br>
+	Born: ${person.birth }<br>
+	<br>
+	<a href="Search">Return to List</a>
 </body>
 </html>
