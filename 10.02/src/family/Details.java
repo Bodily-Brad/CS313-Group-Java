@@ -96,6 +96,7 @@ public class Details extends HttpServlet {
 		     
 		     //close conn
 		     rs.close();
+		     conn.close();
 		     
 		     return children;
 
@@ -161,6 +162,7 @@ public class Details extends HttpServlet {
 		     
 		     //close conn
 		     rs.close();
+		     conn.close();
 		     
 		     return person;
 

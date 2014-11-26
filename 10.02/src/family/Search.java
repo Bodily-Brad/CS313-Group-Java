@@ -79,6 +79,7 @@ public class Search extends HttpServlet {
 		     
 		     //close conn
 		     rs.close();
+		     conn.close();
 
 		}
 		catch(Exception e)
