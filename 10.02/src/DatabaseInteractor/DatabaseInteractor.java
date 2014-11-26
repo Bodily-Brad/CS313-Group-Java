@@ -1,4 +1,4 @@
-package DatabaseInteractor;
+package databaseInteractor;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -29,7 +29,10 @@ public class DatabaseInteractor {
 
 	public DatabaseInteractor() {
 		selectDatabase("/familyDB");
-		DB_URL = "jdbc:mysql://" + host + ":" + port;
+		if(host != null && port != null)
+			DB_URL = "jdbc:mysql://" + host + ":" + port;
+		else
+			useLocalDB();
 	}
 
 	public void selectDatabase(String dbName) {
@@ -64,19 +67,6 @@ public class DatabaseInteractor {
 			// Handle errors for Class.forName
 			e.printStackTrace();
 			success = false;
-		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException se2) {
-			}// nothing we can do
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			}// end finally try
 		}// end try
 		return success;
 	}
@@ -94,29 +84,12 @@ public class DatabaseInteractor {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
 
-			// Clean-up environment
-			stmt.close();
-			conn.close();
-
 		} catch (SQLException se) {
 			// Handle errors for JDBC
 			se.printStackTrace();
 		} catch (Exception e) {
 			// Handle errors for Class.forName
 			e.printStackTrace();
-		} finally {
-			// finally block used to close resources
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException se2) {
-			}// nothing we can do
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException se) {
-				se.printStackTrace();
-			}// end finally try
 		}// end try
 
 		return rs;
@@ -166,5 +139,19 @@ public class DatabaseInteractor {
 		}// end try
 
 		return people;
+	}
+
+	public void closeConnection() {
+		try {
+			if (stmt != null)
+				stmt.close();
+		} catch (SQLException se2) {
+		}// nothing we can do
+		try {
+			if (conn != null)
+				conn.close();
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}// end try
 	}
 }
