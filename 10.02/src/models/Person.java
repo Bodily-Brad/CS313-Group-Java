@@ -1,5 +1,7 @@
 package models;
 
+import java.sql.Date;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,20 +11,38 @@ public class Person {
 	int id;
 	String first;
 	String last;
-	String birthday;
+	Date birthday;
 	Person father;
 	Person mother;
 	List<Person> children;
 	
-	public Person(int pid, String pfirst, String plast, String pbirthday)
+	// Constructors
+	public Person(int id, String first, String last, Date birthday)
 	{
-		id = pid;
-		first = pfirst;
-		last = plast;
-		birthday = pbirthday;
-		father = null;
-		mother = null;
-		children = new ArrayList<Person>();
+		this.id = id;
+		this.first = first;
+		this.last = last;
+		this.birthday = birthday;
+		this.father = null;
+		this.mother = null;
+		this.children = new ArrayList<Person>();
+	}
+	
+	// Preliminary work to create a Person from a ResultSet
+	public Person(ResultSet rs)
+	{
+		try
+		{
+		   	 this.id = rs.getInt("person_id");
+		     this.first = rs.getString("first_name");
+		     this.last = rs.getString("last_name");
+		     this.birthday = rs.getDate("birthday");	
+		     //this.birthday = rs.getString("birthday");
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	// Properties
@@ -64,11 +84,11 @@ public class Person {
 	};
 	
 	// Birth date
-	public String getBirth()
+	public Date getBirth()
 	{
 		return birthday;
 	};	
-	public void setBirth(String pbirth)
+	public void setBirth(Date pbirth)
 	{
 		birthday = pbirth;
 	};

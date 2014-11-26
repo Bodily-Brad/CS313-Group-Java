@@ -2,6 +2,7 @@ package family;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -93,7 +94,7 @@ public class Details extends HttpServlet {
 		    	 int personID = rs.getInt("person_id");
 		         String first = rs.getString("first_name");
 		         String last = rs.getString("last_name");
-		         String birth = rs.getString("birthday");
+		         Date birth = rs.getDate("birthday");
 		         
 		         // Create new person
 		         Person child = new Person(personID, first, last, birth);
@@ -145,7 +146,7 @@ public class Details extends HttpServlet {
 		     String sql = "SELECT * FROM Person WHERE person_id = " + id;
 		     ResultSet rs = stmt.executeQuery(sql);
 		     
-		     Person person = new Person(-1, "", "", "");
+		     Person person = new Person(-1, "", "", new Date(0));
 		     
 		     // Iterate through all records
 		     while(rs.next()){
@@ -154,7 +155,7 @@ public class Details extends HttpServlet {
 		    	 int personID = rs.getInt("person_id");
 		         String first = rs.getString("first_name");
 		         String last = rs.getString("last_name");
-		         String birth = rs.getString("birthday");
+		         Date birth = rs.getDate("birthday");
 		         
 		         // Create new person
 		         person = new Person(personID, first, last, birth);

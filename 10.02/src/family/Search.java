@@ -68,7 +68,7 @@ public class Search extends HttpServlet {
 		    	 int personID = rs.getInt("person_id");
 		         String first = rs.getString("first_name");
 		         String last = rs.getString("last_name");
-		         String birth = rs.getString("birthday");
+		         Date birth = rs.getDate("birthday");
 		         
 		         // Create new person
 		         Person newPerson = new Person(personID, first, last, birth);
