@@ -12,7 +12,13 @@
 	<H1>Details</H1>
 	<strong>${person.first } ${person.last }</strong><br>
 	Born: ${person.birth }<br>
-	<br>
+	<h2>Parents</h2>
+	Father: ${person.father.first }<br>
+	Mother: ${person.mother.first }
+	<h2>Children</h2>
+		<c:forEach var="child" items="${person.children}">
+			${child.first}<br>
+		</c:forEach>	
 	<a href="Search">Return to List</a>
 </body>
 </html>
