@@ -42,8 +42,8 @@ public class DatabaseInteractor {
 		selectDatabase(dbName);
 		return connectToDatabase();
 	}
-	
-	public void useLocalDB(){
+
+	public void useLocalDB() {
 		DB_URL = "jdbc:mysql://localhost";
 	}
 
@@ -81,7 +81,7 @@ public class DatabaseInteractor {
 		return success;
 	}
 
-	public List<Person> executeQuery(String query) {
+	public ResultSet executeQuery(String query) {
 
 		List<Person> people = new ArrayList<Person>();
 		ResultSet rs = null;
@@ -94,20 +94,6 @@ public class DatabaseInteractor {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(query);
 
-			while (rs.next()) {
-				// Get info to create Person object
-				int personID = rs.getInt("person_id");
-				String first = rs.getString("first_name");
-				String last = rs.getString("last_name");
-				Date birth = rs.getDate("birthday");
-
-				// Create new person
-				Person newPerson = new Person(personID, first, last,
-						birth.toString());
-
-				// Add person to return list
-				people.add(newPerson);
-			}
 			// Clean-up environment
 			stmt.close();
 			conn.close();
@@ -130,6 +116,52 @@ public class DatabaseInteractor {
 					conn.close();
 			} catch (SQLException se) {
 				se.printStackTrace();
+			}// end finally try
+		}// end try
+
+		return rs;
+	}
+
+	public List<Person> getAllPeople() {
+
+		String query = "SELECT * FROM person";
+		List<Person> people = new ArrayList<Person>();
+		ResultSet rs = executeQuery(query);
+
+		if (rs == null)
+			return people;
+		try {
+
+			// STEP 4: Execute a query
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(query);
+
+			while (rs.next()) {
+				// Get info to create Person object
+				int personID = rs.getInt("person_id");
+				String first = rs.getString("first_name");
+				String last = rs.getString("last_name");
+				Date birth = rs.getDate("birthday");
+
+				// Create new person
+				Person newPerson = new Person(personID, first, last, birth);
+
+				// Add person to return list
+				people.add(newPerson);
+			}
+		} catch (SQLException se) {
+			// Handle errors for JDBC
+			se.printStackTrace();
+		} catch (Exception e) {
+			// Handle errors for Class.forName
+			e.printStackTrace();
+		} finally {
+			// finally block used to close resources
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}// end finally try
 		}// end try
 
