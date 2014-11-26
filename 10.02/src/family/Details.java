@@ -89,19 +89,10 @@ public class Details extends HttpServlet {
 		     
 		     // Iterate through all records
 		     while(rs.next()){
-		    	 
-		         // Get info to create Person object
-		    	 int personID = rs.getInt("person_id");
-		         String first = rs.getString("first_name");
-		         String last = rs.getString("last_name");
-		         Date birth = rs.getDate("birthday");
 		         
-		         // Create new person
-		         Person child = new Person(personID, first, last, birth);
-		         children.add(child);
+		         // Add person to child list
+		         children.add(new Person(rs));
 		     }
-		     
-		     
 		     
 		     //close conn
 		     rs.close();
@@ -145,42 +136,28 @@ public class Details extends HttpServlet {
 
 		     String sql = "SELECT * FROM Person WHERE person_id = " + id;
 		     ResultSet rs = stmt.executeQuery(sql);
+		     rs.next();
 		     
-		     Person person = new Person(-1, "", "", new Date(0));
+		     Person person = new Person(rs);
 		     
-		     // Iterate through all records
-		     while(rs.next()){
-		    	 
-		         // Get info to create Person object
-		    	 int personID = rs.getInt("person_id");
-		         String first = rs.getString("first_name");
-		         String last = rs.getString("last_name");
-		         Date birth = rs.getDate("birthday");
-		         
-		         // Create new person
-		         person = new Person(personID, first, last, birth);
-		         
-		         // Get Father (yes, this will cascade, but it's okay for now)
-		         if (rs.getString("father") != null)
-		         {
-			         int fatherID = Integer.parseInt(rs.getString("father"));
-		        	 Person father = getPerson(fatherID);
-		        	 person.setFather(father);
-		         }
-		         
-		         // Get Mother
-		         if (rs.getString("mother") != null)
-		         {
-			         int motherID = Integer.parseInt(rs.getString("mother"));
-		        	 Person mother = getPerson(motherID);
-		        	 person.setMother(mother);
-		         }
-		         
-		         // Get Children
-		         person.setChildren(getChildren(person.getId()));
-		     }
-		     
-		     
+	         // Get Father (yes, this will cascade, but it's okay for now)
+	         if (rs.getString("father") != null)
+	         {
+		         int fatherID = Integer.parseInt(rs.getString("father"));
+	        	 Person father = getPerson(fatherID);
+	        	 person.setFather(father);
+	         }
+	         
+	         // Get Mother
+	         if (rs.getString("mother") != null)
+	         {
+		         int motherID = Integer.parseInt(rs.getString("mother"));
+	        	 Person mother = getPerson(motherID);
+	        	 person.setMother(mother);
+	         }
+	         
+	         // Get Children
+	         person.setChildren(getChildren(person.getId()));
 		     
 		     //close conn
 		     rs.close();

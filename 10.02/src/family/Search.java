@@ -63,15 +63,9 @@ public class Search extends HttpServlet {
 		     
 		     // Iterate through all records
 		     while(rs.next()){
-		    	 
-		         // Get info to create Person object
-		    	 int personID = rs.getInt("person_id");
-		         String first = rs.getString("first_name");
-		         String last = rs.getString("last_name");
-		         Date birth = rs.getDate("birthday");
 		         
-		         // Create new person
-		         Person newPerson = new Person(personID, first, last, birth);
+		         // Create new person from RecordSet
+		         Person newPerson = new Person(rs);
 		         
 		         // Add person to return list
 		         people.add(newPerson);

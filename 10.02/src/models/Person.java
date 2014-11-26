@@ -37,7 +37,6 @@ public class Person {
 		     this.first = rs.getString("first_name");
 		     this.last = rs.getString("last_name");
 		     this.birthday = rs.getDate("birthday");	
-		     //this.birthday = rs.getString("birthday");
 		}
 		catch (Exception e)
 		{
