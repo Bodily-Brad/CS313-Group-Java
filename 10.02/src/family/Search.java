@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import DatabaseInteractor.DatabaseInteractor;
+
 import models.Person;
 
 /**
@@ -50,6 +52,10 @@ public class Search extends HttpServlet {
 		String URL = "jdbc:mysql://localhost/familydb";
 		String USER = "team";
 		String PASS = "pass";
+		
+		// Try database interactor
+		DatabaseInteractor db = new DatabaseInteractor();
+		
 		
 		try{
 			//Connection conn = DriverManager.getConnection(URL, USER, PASS);
