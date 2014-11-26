@@ -29,7 +29,10 @@ public class DatabaseInteractor {
 
 	public DatabaseInteractor() {
 		selectDatabase("/familyDB");
-		DB_URL = "jdbc:mysql://" + host + ":" + port;
+		if(host != null && port != null)
+			DB_URL = "jdbc:mysql://" + host + ":" + port;
+		else
+			useLocalDB();
 	}
 
 	public void selectDatabase(String dbName) {
