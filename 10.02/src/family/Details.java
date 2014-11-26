@@ -84,7 +84,7 @@ public class Details extends HttpServlet {
 			//Get data set
 			 Statement stmt = conn.createStatement();
 
-		     String sql = "SELECT * FROM Person WHERE father = " + parentID + " OR mother =" + parentID;
+		     String sql = "SELECT * FROM person WHERE father = " + parentID + " OR mother =" + parentID;
 		     ResultSet rs = stmt.executeQuery(sql);
 		     
 		     // Iterate through all records
@@ -135,7 +135,7 @@ public class Details extends HttpServlet {
 			//Get data set
 			 Statement stmt = conn.createStatement();
 
-		     String sql = "SELECT * FROM Person WHERE person_id = " + id;
+		     String sql = "SELECT * FROM person WHERE person_id = " + id;
 		     ResultSet rs = stmt.executeQuery(sql);
 		     rs.next();
 		     

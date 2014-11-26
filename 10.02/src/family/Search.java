@@ -64,7 +64,7 @@ public class Search extends HttpServlet {
 			//Get data set
 			 Statement stmt = conn.createStatement();
 
-		     String sql = "SELECT * FROM Person";
+		     String sql = "SELECT * FROM person";
 		     ResultSet rs = stmt.executeQuery(sql);
 		     
 		     // Iterate through all records
