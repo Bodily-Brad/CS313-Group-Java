@@ -1,64 +1,31 @@
 package models;
 
-import guessingGame.dbObject;
+public class Item {
 
-public class Item extends dbObject {
-
+	// Constants and Settings
+	private final int DEFAULT_ID = -1;
+	private final String DEFAULT_DESCRIPTION = null;
+	
 	// Local Variables
-	private int itemID;
+	private int id;
 	private String description;
 	
-	// Protected Members
-	protected static String tableName = "items";
-	protected static String keyName = "itemID";
-	protected static String defaultSearchField = "description";
-	protected static String defaultSortField = "description";
-	
 	// Constructors
-	public Item(int itemID, String description)
+	public Item(int id, String description)
 	{
-		this.itemID = itemID;
+		this.id = id;
 		this.description = description;
 	}
 	
 	public Item()
 	{
-		this.itemID = -1;
-		this.description = null;
+		this.id = DEFAULT_ID;
+		this.description = DEFAULT_DESCRIPTION;
 	}
 	
 	// Properties
-	public int getItemID() { return this.itemID; }
+	public int getID() { return this.id; }
 	
 	public String getDescription() { return this.description; }
-	public void setDescription(String description) { this.description = description; }
-	
-	// Class Methods
-	protected static Object createFromRecord(Object record)
-	{
-		// TODO: Need to be able to get field data from a record object
-		return null;
-	}
-	
-	// Methods
-	public static Boolean GetItemExistsByDescription(String description)
-	{
-		// TODO: Database Search
-		
-		String query =
-				"SELECT * " +
-				"FROM " + tableName +
-				"WHERE description LIKE :description";
-		
-		// TODO: Prepare statement if possible
-		
-		return false;		
-	}
-	
-	public static int Insert(String description)
-	{
-		// TODO: Finish this function
-		return -1;
-	}
-	
+	public void setDescription(String description) { this.description = description; }	
 }
