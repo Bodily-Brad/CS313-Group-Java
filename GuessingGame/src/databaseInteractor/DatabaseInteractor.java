@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Person;
 
 /**
  * An interaction object used to interface with a MySQL database either in OpenShift or
@@ -138,58 +137,6 @@ public class DatabaseInteractor {
 		return rs;
 	}
 
-	/**
-	 * Function with hard coded query to pull all persons from the familyDB database.
-	 * @return an ArrayList of persons.
-	 */
-	public List<Person> getAllPeople() {
-
-		String query = "SELECT * FROM person";
-		List<Person> people = new ArrayList<Person>();
-		ResultSet rs = null;
-
-		try {
-
-			// STEP 4: Execute a query
-			if (conn == null)
-				this.connectToDatabase("/familyDB");
-			
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(query);
-
-			if (rs == null)
-				return people;
-			while (rs.next()) {
-				// Get info to create Person object
-				int personID = rs.getInt("person_id");
-				String first = rs.getString("first_name");
-				String last = rs.getString("last_name");
-				Date birth = rs.getDate("birthday");
-
-				// Create new person
-				Person newPerson = new Person(personID, first, last, birth);
-
-				// Add person to return list
-				people.add(newPerson);
-			}
-		} catch (SQLException se) {
-			// Handle errors for JDBC
-			se.printStackTrace();
-		} catch (Exception e) {
-			// Handle errors for Class.forName
-			e.printStackTrace();
-		} finally {
-			// finally block used to close resources
-			try {
-				if (rs != null)
-					rs.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}// end finally try
-		}// end try
-		
-		return people;
-	}
 
 	/**
 	 * Closes the connection from the database and all statements.
