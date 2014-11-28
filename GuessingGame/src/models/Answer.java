@@ -1,35 +1,38 @@
 package models;
 
-import guessingGame.dbObject;
-
-public class Answer extends dbObject {
+/*
+ * Represents a single answer, with an accompanying ID
+ */
+public class Answer {
+	// Constants and Settings
+	private final int DEFAULT_ID = -1;
+	private final String DEFAULT_TEXT = null;
 	
 	// Local variables
+	private int id;
 	private String text;
-	
-	// Protected Members
-	protected static String tableName = "answers";
-	
+		
 	// Constructor
 	public Answer(int id, String text)
 	{
-		this.key = id;
+		this.id = id;
 		this.text = text;
 	}
 	
-	// Protected Methods
-	protected static Object createFromRecord(Object record)
+	public Answer()
 	{
-		if (record != null)
-		{
-			// We need to get the row data for this.keyName and this.text
-			//return new Answer(record[KeyName], record[Text]);
-			return null;
-		}
-		else
-		{
-			return null;
-		}
+		this.id = DEFAULT_ID;
+		this.text = DEFAULT_TEXT;
 	}
-
+	
+	// Properties
+	public int getID() { return this.id; }
+	
+	// Even though key and ID are basically one and the same here,
+	// this is specifically the database key - which should probably
+	// go away before the end
+	public int getKey() { return this.id; }
+	
+	public String getText() { return this.text; }
+	public void setText(String text) { this.text = text; }
 }
