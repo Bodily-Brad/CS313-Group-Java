@@ -1,51 +1,31 @@
 package models;
 
-import guessingGame.dbObject;
-
-public class Question extends dbObject
+public class Question
 {	
-	// Local Variables
-	private String text;
+	// Constants and Settings
+	private final int DEFAULT_ID = -1;
+	private final String DEFAULT_TEXT = null;
 	
-	// Protected Members
-	protected static String tableName = "questions";
-	protected static String keyName = "questionID";
-	protected static String defaultSearchField = "text";
-	protected static String defaultSortField = "text";
+	// Local Variables
+	private int id;
+	private String text;
 	
 	// Constructors
 	public Question(int id, String text)
 	{
-		this.key = id;
+		this.id = id;
 		this.text = text;
 	}
 	
 	public Question()
 	{
-		this.key = -1;
-		this.text = null;
+		this.id = DEFAULT_ID;
+		this.text = DEFAULT_TEXT;
 	}
 
 	// Properties
+	public int getID() { return this.id; }
+	
 	public String getText() { return this.text; }
-	
-	// Methods
-	public static Boolean GetQuestionExistsByText(String text)
-	{
-		// TODO: Implement Database check
-		return false;
-	}
-	
-	public static int Insert(String text)
-	{
-		// TODO: Implement Insert
-		return -1;
-	}
-	
-	// Class Methods
-	public static Question CreateFromRecord(Object record)
-	{
-		// TODO: Implement Record-to-object
-		return null;
-	}
+	public void setText(String text) { this.text = text; }
 }
