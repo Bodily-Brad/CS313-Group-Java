@@ -25,6 +25,7 @@ public class Item {
 	
 	// Properties
 	public int getID() { return this.id; }
+	public void setID(int id) { this.id = id; }	
 	
 	public String getDescription() { return this.description; }
 	public void setDescription(String description) { this.description = description; }	

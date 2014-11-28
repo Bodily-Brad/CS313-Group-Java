@@ -27,6 +27,7 @@ public class Answer {
 	
 	// Properties
 	public int getID() { return this.id; }
+	public void setID(int id) { this.id = id; }	
 	
 	// Even though key and ID are basically one and the same here,
 	// this is specifically the database key - which should probably
