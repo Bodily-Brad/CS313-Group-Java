@@ -1,4 +1,6 @@
-package guessingGame;
+package models;
+
+import guessingGame.dbObject;
 
 public class Question extends dbObject
 {	

@@ -1,4 +1,4 @@
-package guessingGame;
+package models;
 
 public enum GameState {
 	Started,
