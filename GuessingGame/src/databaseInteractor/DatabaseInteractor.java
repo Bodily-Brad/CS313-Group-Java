@@ -173,7 +173,6 @@ public class DatabaseInteractor {
 	{
 		String query =	"SELECT * from " + tableName + " WHERE " + keyName + "= " + key;
 		ResultSet rs = executeQuery(query);
-		closeConnection();
 		return rs;
 	}
 	
@@ -181,7 +180,6 @@ public class DatabaseInteractor {
 	{
 		String query =	"SELECT * from " + tableName;
 		ResultSet rs = executeQuery(query);
-		closeConnection();
 		return rs;
 	}
 }
