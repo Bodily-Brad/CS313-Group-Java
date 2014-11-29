@@ -1,8 +1,11 @@
 package databaseInteractor;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GameDBInteractor {
+public abstract class GameDBInteractor {
 
 	private static DatabaseInteractor DBi = null;
 
@@ -20,8 +23,77 @@ public class GameDBInteractor {
 		DBi.setUser("game_player", "");
 	}
 
-	protected static ResultSet readRecord(String tableName, String keyName,
-			int key) {
+	
+	// Protected Members
+    protected static String mKey;
+    
+    // Properties
+    public static String GetKey() {
+    	return mKey;
+    }
+    
+    public static Object createFromRecord(ResultSet rs) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    
+    
+    // Public Methods
+    public static Object LoadFromDatabase(String key)
+    {
+    	Object obj = null;
+        ResultSet record = readRecord(key);
+        if (record != null)
+        {
+            obj = createFromRecord(record);
+        }
+        return obj;
+    }
+    
+    private static List<Object> convertRStoList(ResultSet rs){
+    	Object obj = null;
+        List<Object> objects = new ArrayList<Object>();
+
+        if (rs != null)
+        {
+            try {
+				while (rs.next())
+				{
+				    Object object = createFromRecord(rs);
+				    objects.add(object);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        return objects;
+    }
+    
+    public static List<Object> LoadAllFromDatabase()
+    {
+    	return LoadAllFromDatabase(null);
+    }
+    
+    public static List<Object> LoadAllFromDatabase(String[] excludedKeys)
+    {
+        ResultSet rs = readRecords(excludedKeys);
+    	return convertRStoList(rs);
+    }
+    
+    public static List<Object> Search()
+    {
+    	return Search(null);
+    }
+    
+    public static List<Object> Search(String criteria)
+    {
+        ResultSet records = searchRecords(criteria);
+        return convertRStoList(records);
+    }
+    
+    
+	protected static ResultSet readRecord(String key) {
 
 		// Query String
 		query = " SELECT * FROM " + tableName + " WHERE " + keyName + " = :"
@@ -40,8 +112,7 @@ public class GameDBInteractor {
 		}
 	}
 
-	protected static ResultSet readRecords(String tableName, String keyName,
-			String defaultSortField, int[] excludedKeys) {
+	protected static ResultSet readRecords(String[] excludedKeys) {
 
 		query = "SELECT * FROM " + tableName;
 
