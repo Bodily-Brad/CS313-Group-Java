@@ -15,9 +15,10 @@ public class GameDB extends DatabaseInteractor {
 	static String query = null;
 	static ResultSet rs = null;
 
-	public GameDB() {		
+	public GameDB() {
+		super();
 		DatabaseInteractor.selectDatabase("guessing_game");
-		DatabaseInteractor.setUser("game_player", "");
+		DatabaseInteractor.setUser("gameplayer", "play");
 	}
     
     // Public Methods

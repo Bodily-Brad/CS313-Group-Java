@@ -43,6 +43,13 @@ public class Test extends HttpServlet {
 		// show test view
 		request.getRequestDispatcher("/testViewResponse.jsp").forward(request, response);
 		
+//		static final String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
+//		static final String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
+		
+//		response.getWriter().write("URL: " + GameDB.DB_URL + "<BR>");
+//		response.getWriter().write("DB:  " + GameDB.database + "<BR>");
+		
+		
 	}
 
 	/**

@@ -24,8 +24,8 @@ public class DatabaseInteractor {
 	static final String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
 
 	// JDBC driver name and database URL
-	private static String DB_URL;
-	private static String database = "";
+	public static String DB_URL;
+	public static String database = "";
 
 	// Database credentials
 	private static String USER = "team";
