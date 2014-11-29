@@ -57,6 +57,16 @@ public class DatabaseInteractor {
 	}
 
 	/**
+	 * Set User.
+	 * This function allows the username and password to be set.
+	 */
+	public void setUser(String pUsername, String pPassword){
+		this.USER = pUsername;
+		this.PASS = pPassword;
+	}
+	
+	
+	/**
 	 * Allows the use of databases other than the familyDB
 	 * @param dbName A string of the database to be used. Can include a '/'
 	 * or may optionally omit it.
