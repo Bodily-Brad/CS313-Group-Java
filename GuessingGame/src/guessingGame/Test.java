@@ -1,6 +1,9 @@
 package guessingGame;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,6 +44,14 @@ public class Test extends HttpServlet {
 		{
 			response.getWriter().write("URL: " + GameDB.DB_URL + "\n");
 			response.getWriter().write("DB:  " + GameDB.database + "\n");
+			
+			try {
+				Connection conn = DriverManager.getConnection(GameDB.DB_URL + GameDB.database, GameDB.USER, GameDB.PASS);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				response.getWriter().write(e.getMessage() + "\n");
+				e.printStackTrace();
+			}			
 		}
 		else
 		{

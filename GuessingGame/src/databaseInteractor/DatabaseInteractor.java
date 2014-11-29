@@ -28,8 +28,8 @@ public class DatabaseInteractor {
 	public static String database = "";
 
 	// Database credentials
-	private static String USER = "team";
-	private static String PASS = "pass";
+	public static String USER = "team";
+	public static String PASS = "pass";
 	//private static String USER = System.getenv("OPENSHIFT_MYSQL_DB_USERNAME");	
 	//private static String PASS = System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD");
 
