@@ -37,6 +37,14 @@ public class Test extends HttpServlet {
 		GameDB game = new GameDB();
 		Response test = game.GetResponse(1);
 		
+		if (test == null)
+		{
+			response.getWriter().write("URL: " + GameDB.DB_URL + "\n");
+			response.getWriter().write("DB:  " + GameDB.database + "\n");
+		}
+		else
+		{
+		
 		// pass item
 		request.setAttribute("response", test);
 		
@@ -46,8 +54,8 @@ public class Test extends HttpServlet {
 //		static final String host = System.getenv("OPENSHIFT_MYSQL_DB_HOST");
 //		static final String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
 		
-//		response.getWriter().write("URL: " + GameDB.DB_URL + "<BR>");
-//		response.getWriter().write("DB:  " + GameDB.database + "<BR>");
+
+		}
 		
 		
 	}

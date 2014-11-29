@@ -19,6 +19,7 @@ public class GameDB extends DatabaseInteractor {
 		super();
 		DatabaseInteractor.selectDatabase("guessing_game");
 		DatabaseInteractor.setUser("gameplayer", "play");
+		//DatabaseInteractor.setUser(System.getenv("OPENSHIFT_MYSQL_DB_USERNAME"),System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD"));
 	}
     
     // Public Methods
