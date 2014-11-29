@@ -39,6 +39,22 @@ public abstract class GameDBInteractor {
     
     
     // Public Methods
+    public static int GetItemIDWithLowestResponseCount()
+    {
+        // Query String
+        String query =
+    		"SELECT itemID, SUM(count) AS total " +
+            "FROM   responses " +
+            "GROUP BY itemID " +
+            "ORDER BY total";
+        
+        // TODO: Execute this query
+        // TODO: Retrieve itemID
+        
+        // TODO: Return proper ItemID
+        return 0;
+    }
+    
     public static Object LoadFromDatabase(String key)
     {
     	Object obj = null;

@@ -64,7 +64,7 @@ public class Game {
 		{
 			Item item = (Item)obj;	// Cast Object to Item
 			
-			confidences.set(item.getItemID(), 0.0f);
+			confidences.set(item.getID(), 0.0f);
 			
 			// Iterate through questions in answered questions array
 			Map<Integer, Integer> questionsAnswered = Game.getQuestionsAnswered(session);
@@ -72,18 +72,18 @@ public class Game {
 			{
 				int answerID = questionsAnswered.get(questionID);
 				
-				float count = Response.GetResponseCount(item.getItemID(), questionID, answerID);
-				float totalCount = Response.GetTotalResponsesByQuestionAndItem(questionID, item.getItemID());
+				float count = Response.GetResponseCount(item.getID(), questionID, answerID);
+				float totalCount = Response.GetTotalResponsesByQuestionAndItem(questionID, item.getID());
 				float averageCount = totalCount / 4.0f;	// Hard set to 4 responses
 				
 				float increase = 0.0f;
 				if (averageCount > 0)
 					increase = (count / averageCount - 1.0f);
 				
-				float newConf = confidences.get(item.getItemID());
+				float newConf = confidences.get(item.getID());
 				newConf += increase;
 				
-				confidences.set(item.getItemID(), newConf);
+				confidences.set(item.getID(), newConf);
 			}
 		}
 		

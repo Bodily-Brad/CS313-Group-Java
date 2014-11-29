@@ -14,10 +14,10 @@ public class dbObject {
 	protected static String defaultSortField = "sort";
 	
 	// Protected Members
-	protected int key;
+	protected int id;
 	
 	// Properties
-	public int getKey() { return key; }
+	public int getKey() { return id; }
 	
 	// Public Static Methods
 	
