@@ -11,7 +11,7 @@ import models.*;
  * @author cave
  *
  */
-public final class ResponseDBI extends GameDBInteractor {
+public final class ResponseDBI extends OldGameDBInteractor {
 
 	public ResponseDBI() {
 		super();

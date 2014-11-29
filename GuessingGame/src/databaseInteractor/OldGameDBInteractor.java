@@ -5,10 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GameDBInteractor {
+import models.Answer;
+import models.Item;
+import models.Question;
+import models.Response;
+
+public class OldGameDBInteractor {
 
 	private static DatabaseInteractor DBi = null;
-
+	
 	static String query = null;
 	static ResultSet rs = null;
 
@@ -17,7 +22,7 @@ public abstract class GameDBInteractor {
     protected static String defaultSearchField = "search";
     protected static String defaultSortField = "sort";
 
-	public GameDBInteractor() {
+	public OldGameDBInteractor() {
 		DBi = new DatabaseInteractor();
 		DBi.selectDatabase("guessing_game");
 		DBi.setUser("game_player", "");
@@ -39,22 +44,8 @@ public abstract class GameDBInteractor {
     
     
     // Public Methods
-    public static int GetItemIDWithLowestResponseCount()
-    {
-        // Query String
-        String query =
-    		"SELECT itemID, SUM(count) AS total " +
-            "FROM   responses " +
-            "GROUP BY itemID " +
-            "ORDER BY total";
-        
-        // TODO: Execute this query
-        // TODO: Retrieve itemID
-        
-        // TODO: Return proper ItemID
-        return 0;
-    }
     
+    // Removed in conversion to static
     public static Object LoadFromDatabase(String key)
     {
     	Object obj = null;
@@ -108,7 +99,6 @@ public abstract class GameDBInteractor {
         return convertRStoList(records);
     }
     
-    
 	protected static ResultSet readRecord(String key) {
 
 		// Query String
@@ -146,10 +136,12 @@ public abstract class GameDBInteractor {
 		// Add sorting
 		query += " ORDER BY " + defaultSortField;
 		try {
+			// Converted to static
 			if (DBi.conn == null)
 				DBi.connectToDatabase();
 			rs = DBi.executeQuery(query);
 			DBi.closeConnection();
+
 			return rs;
 
 		} catch (Exception ex) {

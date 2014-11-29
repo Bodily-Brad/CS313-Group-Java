@@ -11,7 +11,7 @@ import models.Item;
  * @author cave
  *
  */
-public final class ItemDBI extends GameDBInteractor {
+public final class ItemDBI extends OldGameDBInteractor {
 
 	/**
 	 * 

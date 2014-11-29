@@ -11,7 +11,7 @@ import models.Answer;
  * @author cave
  *
  */
-public final class AnswerDBI extends GameDBInteractor {
+public final class AnswerDBI extends OldGameDBInteractor {
 
 	public AnswerDBI() {
 		super();

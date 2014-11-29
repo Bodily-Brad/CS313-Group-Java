@@ -24,16 +24,16 @@ public class DatabaseInteractor {
 	static final String port = System.getenv("OPENSHIFT_MYSQL_DB_PORT");
 
 	// JDBC driver name and database URL
-	private String DB_URL;
-	private String database = "";
+	private static String DB_URL;
+	private static String database = "";
 
 	// Database credentials
-	private String USER = "team";
-	private String PASS = "pass";
+	private static String USER = "team";
+	private static String PASS = "pass";
 
 	// Connection and statement objects for use throughout
-	Connection conn = null;
-	Statement stmt = null;
+	static Connection conn = null;
+	static Statement stmt = null;
 
 	/**
 	 * Default constructor.
@@ -60,9 +60,9 @@ public class DatabaseInteractor {
 	 * Set User.
 	 * This function allows the username and password to be set.
 	 */
-	public void setUser(String pUsername, String pPassword){
-		this.USER = pUsername;
-		this.PASS = pPassword;
+	public static void setUser(String pUsername, String pPassword){
+		USER = pUsername;
+		PASS = pPassword;
 	}
 	
 	
@@ -71,7 +71,7 @@ public class DatabaseInteractor {
 	 * @param dbName A string of the database to be used. Can include a '/'
 	 * or may optionally omit it.
 	 */
-	public void selectDatabase(String dbName) {
+	public static void selectDatabase(String dbName) {
 		if (!dbName.startsWith("/"))
 			dbName = "/" + dbName;
 		database = dbName;
@@ -83,7 +83,7 @@ public class DatabaseInteractor {
 	 * @param dbName
 	 * @return True if connection is successful.
 	 */
-	public boolean connectToDatabase(String dbName) {
+	public static boolean connectToDatabase(String dbName) {
 		selectDatabase(dbName);
 		return connectToDatabase();
 	}
@@ -91,7 +91,7 @@ public class DatabaseInteractor {
 	/**
 	 * Allows the forced use of localhost as the database URL
 	 */
-	public void useLocalDB() {
+	public static void useLocalDB() {
 		DB_URL = "jdbc:mysql://localhost";
 	}
 
@@ -100,7 +100,7 @@ public class DatabaseInteractor {
 	 * a query, or alternatively will be called by default if the connection has not been made.
 	 * @return Success status of database connection
 	 */
-	public boolean connectToDatabase() {
+	public static boolean connectToDatabase() {
 		boolean success = true;
 		try {
 			// STEP 3: Open a connection
@@ -123,7 +123,7 @@ public class DatabaseInteractor {
 	 * @param query string.
 	 * @return A ResultSet containing the results of the query.
 	 */
-	public ResultSet executeQuery(String query) {
+	public static ResultSet executeQuery(String query) {
 
 		ResultSet rs = null;
 
@@ -153,7 +153,7 @@ public class DatabaseInteractor {
 	 * This function MUST be called when finished or it will cause a memory leak
 	 * on OpenShift.
 	 */
-	public void closeConnection() {
+	public static void closeConnection() {
 		try {
 			if (stmt != null)
 				stmt.close();
@@ -167,5 +167,21 @@ public class DatabaseInteractor {
 		} catch (SQLException se) {
 			se.printStackTrace();
 		}// end try
+	}
+	
+	protected static ResultSet readRecord(String tableName, String keyName, int key)
+	{
+		String query =	"SELECT * from " + tableName + " WHERE " + keyName + "= " + key;
+		ResultSet rs = executeQuery(query);
+		closeConnection();
+		return rs;
+	}
+	
+	protected static ResultSet readRecords(String tableName)
+	{
+		String query =	"SELECT * from " + tableName;
+		ResultSet rs = executeQuery(query);
+		closeConnection();
+		return rs;
 	}
 }
