@@ -16,10 +16,10 @@ public final class QuestionDBI extends GameDBInteractor {
 	public QuestionDBI() {
 		super();
 		// Protected Members
-		tableName = "answers";
-		keyName = "answerID";
+		tableName = "questions";
+		keyName = "questionID";
 		defaultSearchField = "text";
-		defaultSortField = "answerID";
+		defaultSortField = "text";
 	}
 
 	public static Object createFromRecord(ResultSet rs) {

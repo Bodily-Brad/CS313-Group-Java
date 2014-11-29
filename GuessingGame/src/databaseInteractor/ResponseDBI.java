@@ -16,10 +16,10 @@ public final class ResponseDBI extends GameDBInteractor {
 	public ResponseDBI() {
 		super();
 		// Protected Members
-		tableName = "answers";
-		keyName = "answerID";
-		defaultSearchField = "text";
-		defaultSortField = "answerID";
+		tableName = "responses";
+		keyName = "responseID";
+		defaultSearchField = "responseID";
+		defaultSortField = "responseID";
 	}
 
 	public static Object createFromRecord(ResultSet rs) {
