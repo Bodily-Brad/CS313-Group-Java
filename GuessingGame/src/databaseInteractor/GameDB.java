@@ -33,7 +33,10 @@ public class GameDB extends DatabaseInteractor {
 	 * data storage logic 
 	 */
 	
+	public static List<Answer> GetAllAnswers() { return readAnswers(); }
 	public static List<Item> GetAllItems() { return readItems(); }
+	public static List<Question> GetAllQuestions() { return readQuestions(); }
+	public static List<Question> GetAllQuestions(List<Integer> excludedKeys) { return readQuestions(excludedKeys); }
 	
 	public static Answer GetAnswer(int answerID) { return readAnswer(answerID); }
 	public static Item GetItem(int itemID) { return readItem(itemID); }
@@ -169,6 +172,26 @@ public class GameDB extends DatabaseInteractor {
 		return answer;
 	}
 	
+	private static List<Answer> readAnswers()
+	{
+		ResultSet rs = DatabaseInteractor.readRecords("answers");
+		List<Answer> answers = new ArrayList<Answer>();
+		try
+		{
+			answers = resultSetToAnswerList(rs);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+		}
+		finally
+		{
+			DatabaseInteractor.closeConnection();
+		}
+		
+		return answers;		
+	}
+	
 	/**
      * Reads an Item record from the database and returns
      * a corresponding Item object
@@ -202,7 +225,7 @@ public class GameDB extends DatabaseInteractor {
 	 */
 	private static List<Item> readItems()
 	{
-		ResultSet rs = DatabaseInteractor.readRecords("items");
+		ResultSet rs = DatabaseInteractor.readRecords("items", "description");
 		List<Item> items = new ArrayList<Item>();
 		try
 		{
@@ -240,6 +263,75 @@ public class GameDB extends DatabaseInteractor {
 		}
 		
 		return question;	
+	}
+	
+	private static List<Question> readQuestions()
+	{
+		ResultSet rs = DatabaseInteractor.readRecords("questions");
+		List<Question> questions = new ArrayList<Question>();
+		try
+		{
+			questions = resultSetToQuestionList(rs);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+		}
+		finally
+		{
+			DatabaseInteractor.closeConnection();
+		}
+		
+		return questions;		
+	}
+	
+	/**
+	 * Attempts to read a set of questions from the database that do not contain an excluded key
+	 * @param excludedKeys A list of integers to exclude from the returned list
+	 * @return A list of Questions representing all questions not specifically excluded
+	 */
+	private static List<Question> readQuestions(List<Integer> excludedKeys)
+	{	
+		List<Question> questions = new ArrayList<Question>();
+		
+		String query =
+				"SELECT * " +
+                "FROM	questions";
+		
+		// add clause for excluded keys, if necessary
+		if (!excludedKeys.isEmpty())
+		{
+			query += " WHERE questionID NOT IN (";
+			for (int i = 0; i < excludedKeys.size(); i++)
+			{
+				int key = excludedKeys.get(i);
+				query += key;
+				
+				if ((excludedKeys.size() > 1) &&
+					(i < excludedKeys.size() - 1))
+					query += ", ";
+			}
+			query += ")";
+		}
+		
+		// Execute query
+		System.err.println("query: " + query + "\n");
+		ResultSet rs = executeQuery(query);
+		
+		try
+		{
+			questions = resultSetToQuestionList(rs);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+		return questions;		
 	}
 	
 	private static Response readResponse(int responseID)
@@ -354,6 +446,26 @@ public class GameDB extends DatabaseInteractor {
 		}		
 	}
 	
+	private static List<Answer> resultSetToAnswerList(ResultSet rs)
+	{
+		List<Answer> answers = new ArrayList<Answer>();
+		
+		try
+		{
+			while (rs.next())
+			{
+				Answer answer = resultSetToAnswer(rs);
+				answers.add(answer);
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		return answers;		
+	}
+	
 	// Attempts to create an Item object from a ResultSet
 	private static Item resultSetToItem(ResultSet rs)
 	{
@@ -412,6 +524,26 @@ public class GameDB extends DatabaseInteractor {
 			System.err.println(e.getMessage());
 			return null;
 		}
+	}
+	
+	private static List<Question> resultSetToQuestionList(ResultSet rs)
+	{
+		List<Question> questions = new ArrayList<Question>();
+		
+		try
+		{
+			while (rs.next())
+			{
+				Question question = resultSetToQuestion(rs);
+				questions.add(question);
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		return questions;
 	}
 	
 	// Attempts to create a Response object from a ResultSet

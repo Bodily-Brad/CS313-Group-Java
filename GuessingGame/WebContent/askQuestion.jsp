@@ -5,20 +5,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Guessing Game</title>
+<title>Ask Question</title>
 </head>
 <body>
 	<div class='gameFrame'>
-		<div class='gameNote'>Questions Left: ${param.NumQuestionsLeft}</div>
+		<div class='gameNote'>Questions Left: ${NumQuestionsLeft}</div>
 		<div class='gameUserInputArea'>
-			<div class='gameQuestion'>${param.QuestionText}</div>
+			<div class='gameQuestion'>${question.text}</div>
 			<div class='gameButtonArea'>
 				<c:forEach var="answer" items="${answers}">
 					<form class='gameUserInput' method='post' action='Play'>
 						<input type='hidden' name='action' value='answerQuestion'>
-						<input type='hidden' name='answerID' value='${param.answerID}'>
-						<input type='hidden' name='questionID' value='${param.questionID }'>
-						<input type='submit' value='${answer.GetText()}'>
+						<input type='hidden' name='answerID' value='${answer.ID}'>
+						<input type='hidden' name='questionID' value='${question.ID }'>
+						<input type='submit' value="${answer.text}">
 					</form>
 				</c:forEach>
 				<br>				
@@ -26,5 +26,21 @@
 		</div>
 		<div class='gameNote'><a href="?action=End">Start Over</a></div>
 	</div>
+	<h1>Debug Info</h1>
+		<h2>Asked Map</h2>
+		Size: ${askedMap.size() }<br>
+		<pre><code>${askedMap}</code></pre>
+		<h2>Asked Questions</h2>
+			<ul>
+				<c:forEach var="askedQuestion" items="${askedQuestions }">
+					<li>${askedQuestion.text}</li>
+				</c:forEach>
+			</ul>	
+		<h2>All Questions</h2>
+			<ul>
+				<c:forEach var="tempQuestion" items="${allQuestions }">
+					<li>${tempQuestion.text}</li>
+				</c:forEach>
+			</ul>
 </body>
 </html>

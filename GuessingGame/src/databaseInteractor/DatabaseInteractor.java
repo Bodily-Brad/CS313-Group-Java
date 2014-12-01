@@ -221,4 +221,11 @@ public class DatabaseInteractor {
 		ResultSet rs = executeQuery(query);
 		return rs;
 	}
+	
+	protected static ResultSet readRecords(String tableName, String sortField)
+	{
+		String query =	"SELECT * from " + tableName + " ORDER BY " + sortField;
+		ResultSet rs = executeQuery(query);
+		return rs;		
+	}
 }

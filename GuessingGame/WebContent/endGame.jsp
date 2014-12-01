@@ -15,12 +15,12 @@
             <div class='gameButtonArea'>
                 <form class='gameUserInput' method='post' action='/game/play/'>
                     <input type='hidden' name='action' value='confirmGuess'>
-                    <input type='hidden' name='itemID' value='${guessItem.itemID }'>
+                    <input type='hidden' name='itemID' value='${guessItem.ID }'>
                     <input type='submit' value='Yes'>
                 </form>
                 <form class='gameUserInput' method='post' action='/game/play/'>
                     <input type='hidden' name='action' value='denyGuess'>
-                    <input type='hidden' name='itemID' value='${guessItem.itemID }'>
+                    <input type='hidden' name='itemID' value='${guessItem.ID }'>
                     <input type='submit' value='No'>
                 </form>                
                 <br>

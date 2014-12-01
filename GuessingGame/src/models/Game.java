@@ -6,8 +6,10 @@ import javax.servlet.http.HttpSession;
 import databaseInteractor.GameDB;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Game {
 
@@ -19,10 +21,10 @@ public class Game {
 	protected static int STARTING_QUESTIONS = 20;
 	
 	// These may become an Enum instead
-	public static String GAMESTATE_STARTED = "GAMESTATE_STARTED";
-	public static String GAMESTATE_SOLVING = "GAMESTATE_SOLVING";
-	public static String GAMESTATE_FINISH_CORRECT = "GAMESTATE_FINISH_CORRECT";
-	public static String GAMESTATE_FINISH_INCORRECT = "GAMESTATE_FINISH_INCORRECT";
+//	public static String GAMESTATE_STARTED = "GAMESTATE_STARTED";
+//	public static String GAMESTATE_SOLVING = "GAMESTATE_SOLVING";
+//	public static String GAMESTATE_FINISH_CORRECT = "GAMESTATE_FINISH_CORRECT";
+//	public static String GAMESTATE_FINISH_INCORRECT = "GAMESTATE_FINISH_INCORRECT";
 	
 	// "Properties"
 	public static GameState getGameState(HttpSession session)
@@ -47,12 +49,18 @@ public class Game {
 	
 	public static Map<Integer, Integer> getQuestionsAnswered(HttpSession session)
 	{
-		return (Map<Integer, Integer>)session.getAttribute(QUESTIONS_LIST_KEY);
+		Object map = session.getAttribute(QUESTIONS_LIST_KEY);
+		if (map != null)
+		{
+			Map<Integer, Integer> returnMap = (Map<Integer, Integer>)map;
+			return returnMap;
+		}
+		return new HashMap<Integer, Integer>();
 	}
 	
-	public static void setQuestionsAnswered(HttpSession session, Map<Integer, Integer> questionsList)
+	public static void setQuestionsAnswered(HttpSession session, Map<Integer, Integer> questionsMap)
 	{
-		session.setAttribute(QUESTIONS_LIST_KEY, questionsList);
+		session.setAttribute(QUESTIONS_LIST_KEY, questionsMap);
 	}
 	
 	// Methods
@@ -63,7 +71,7 @@ public class Game {
 		// Brute Method
 		List<Item> items = GameDB.GetAllItems();
 		
-		ArrayList<Float> confidences = new ArrayList<Float>();
+		ArrayList<Float> confidences = new ArrayList<Float>(items.size());
 		
 		for (Item item : items)
 		{			
@@ -71,9 +79,10 @@ public class Game {
 			
 			// Iterate through questions in answered questions array
 			Map<Integer, Integer> questionsAnswered = Game.getQuestionsAnswered(session);
-			for (int questionID : questionsAnswered.keySet())
+			for (Map.Entry<Integer, Integer> entry : questionsAnswered.entrySet())
 			{
-				int answerID = questionsAnswered.get(questionID);
+				int answerID = entry.getValue();
+				int questionID = entry.getKey();
 				
 				float count = GameDB.GetResponseCount(item.getID(), questionID, answerID);
 				float totalCount = GameDB.GetTotalResponsesByQuestionAndItem(questionID, item.getID());
@@ -127,8 +136,31 @@ public class Game {
 	public static int GetRandomQuestionID(HttpSession session)
 	{
 		Map<Integer, Integer> askedQuestions = Game.getQuestionsAnswered(session);
-		// TODO: Implement 'get random question' logic
 		
+		List<Integer> excludedQuestionIDs = new ArrayList<Integer>();
+		
+		// Create exclusion list from askedQuestions map
+		for (Map.Entry<Integer, Integer> entry : askedQuestions.entrySet())
+		{
+			if (!excludedQuestionIDs.contains(entry.getKey()))
+				excludedQuestionIDs.add(entry.getKey());
+		}
+		
+		// Try reading exclusions
+		// TODO: Add exclusion handling
+		List<Question> questions = GameDB.GetAllQuestions();
+		
+		if (questions.size() > 0)
+		{
+			Random random = new Random();
+			
+			Question question = questions.get(random.nextInt(questions.size()));
+			int questionID = question.getID();
+			
+			return questionID;
+		}
+		
+		// else
 		return -1;
 	}
 	
@@ -153,10 +185,11 @@ public class Game {
 	public static void RecordAnswer(HttpSession session, int questionID, int answerID)
 	{
 		Map<Integer, Integer> questionsAnswered = Game.getQuestionsAnswered(session);
+
 		questionsAnswered.put(questionID, answerID);
 		
 		Game.setQuestionsAnswered(session, questionsAnswered);
-		Game.setQuestionsLeft(session, Game.getQuestionsLeft(session)-1);
+		Game.setQuestionsLeft(session, Game.getQuestionsLeft(session) - 1);
 	}
 	
 	public static void RecordPlayerResponses(HttpSession session, int itemID)
@@ -174,6 +207,7 @@ public class Game {
 	public static void StartNewGame(HttpSession session)
 	{
 		Game.EndGame(session);
+		Game.setGameState(session, GameState.Started);
 		Game.setQuestionsLeft(session, STARTING_QUESTIONS);
 	}
 	

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>New Game</title>
 </head>
 <body>
     <div class='gameFrame'>
@@ -38,7 +38,7 @@
                 </p>         
             </div>            
         </div>
-        <div class='gameNote'><a href="?action=Start">Okay, got it. Let's go!</a></div>
+        <div class='gameNote'><a href="Play">Okay, got it. Let's go!</a></div>
     </div>
 </body>
 </html>
