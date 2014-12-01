@@ -3,12 +3,15 @@ package models;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import databaseInteractor.GameDB;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Game {
 
+	
 	// Class Variables
 	protected static String GAMESTATE_KEY = "gamestate";
 	protected static String QUESTIONS_LEFT_KEY = "questionsLeft";
@@ -36,6 +39,7 @@ public class Game {
 	{
 		return (int)session.getAttribute(QUESTIONS_LEFT_KEY);
 	}
+	
 	public static void setQuestionsLeft(HttpSession session, int value)
 	{
 		session.setAttribute(QUESTIONS_LEFT_KEY, value);
@@ -45,6 +49,7 @@ public class Game {
 	{
 		return (Map<Integer, Integer>)session.getAttribute(QUESTIONS_LIST_KEY);
 	}
+	
 	public static void setQuestionsAnswered(HttpSession session, Map<Integer, Integer> questionsList)
 	{
 		session.setAttribute(QUESTIONS_LIST_KEY, questionsList);
@@ -56,14 +61,12 @@ public class Game {
 		setGameState(session, GameState.Solving);
 		
 		// Brute Method
-		List<Object> items = Item.LoadAllFromDatabase();
+		List<Item> items = GameDB.GetAllItems();
 		
 		ArrayList<Float> confidences = new ArrayList<Float>();
 		
-		for (Object obj : items)
-		{
-			Item item = (Item)obj;	// Cast Object to Item
-			
+		for (Item item : items)
+		{			
 			confidences.set(item.getID(), 0.0f);
 			
 			// Iterate through questions in answered questions array
@@ -72,8 +75,8 @@ public class Game {
 			{
 				int answerID = questionsAnswered.get(questionID);
 				
-				float count = Response.GetResponseCount(item.getID(), questionID, answerID);
-				float totalCount = Response.GetTotalResponsesByQuestionAndItem(questionID, item.getID());
+				float count = GameDB.GetResponseCount(item.getID(), questionID, answerID);
+				float totalCount = GameDB.GetTotalResponsesByQuestionAndItem(questionID, item.getID());
 				float averageCount = totalCount / 4.0f;	// Hard set to 4 responses
 				
 				float increase = 0.0f;
@@ -129,6 +132,24 @@ public class Game {
 		return -1;
 	}
 	
+	public static void IncrementCount(int itemID, int questionID, int answerID)
+	{
+		Response response = GameDB.GetResposne(itemID, questionID, answerID);
+		
+		// Check if item/question/answer combo has been tracked already
+		if (response != null)
+		{
+			int count = response.getCount();
+			count++;
+			GameDB.UpdateResponseCount(response.getID(), count);
+		}
+		// Otherwise, create new response
+		else
+		{
+			GameDB.InsertResponse(itemID, questionID, answerID, 1);
+		}
+	}
+	
 	public static void RecordAnswer(HttpSession session, int questionID, int answerID)
 	{
 		Map<Integer, Integer> questionsAnswered = Game.getQuestionsAnswered(session);
@@ -145,7 +166,7 @@ public class Game {
 		for (int questionID : questionsAnswered.keySet())
 		{
 			int answerID = questionsAnswered.get(questionID);
-			Response.IncrementCount(itemID, questionID, answerID);
+			IncrementCount(itemID, questionID, answerID);
 		}
 		
 	}

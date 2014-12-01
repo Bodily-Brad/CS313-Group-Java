@@ -2,6 +2,7 @@ package databaseInteractor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +24,35 @@ public class GameDB extends DatabaseInteractor {
 	}
     
     // Public Methods
-	public Answer GetAnswer(int answerID) { return readAnswer(answerID); }
-	public Item GetItem(int itemID) { return readItem(itemID); }
-	public Question GetQuestion(int questionID) { return readQuestion(questionID); }
-	public Response GetResponse(int responseID) { return readResponse(responseID); }
+	
+	/*
+	 * I've left functions that execute queries as private functions. These
+	 * properties deal with object-logic rather than database logic. This
+	 * does create some additional private functions that could be handled
+	 * in the getters, but it leaves the public interface independent of
+	 * data storage logic 
+	 */
+	
+	public static List<Item> GetAllItems() { return readItems(); }
+	
+	public static Answer GetAnswer(int answerID) { return readAnswer(answerID); }
+	public static Item GetItem(int itemID) { return readItem(itemID); }
+	public static Question GetQuestion(int questionID) { return readQuestion(questionID); }
+	public static Response GetResponse(int responseID) { return readResponse(responseID); }
+	public static Response GetResposne(int itemID, int questionID, int answerID) { return readResponseByCriteria(itemID, questionID, answerID); }
+	
+	/**
+	 * Returns the response count for a particular item/question/answer combo
+	 * @param itemID Item key
+	 * @param questionID Question key
+	 * @param answerID Answer key
+	 * @return The response count for the specified item/question/answer combo
+	 */
+	public static int GetResponseCount(int itemID, int questionID, int answerID)
+	{
+		Response response = readResponseByCriteria(itemID, questionID, answerID);
+		return response.getCount();
+	}
 	
     public static int GetItemIDWithLowestResponseCount()
     {
@@ -52,7 +78,68 @@ public class GameDB extends DatabaseInteractor {
         }
     }
 	
+    public static int GetTotalResponsesByQuestionAndItem(int questionID, int itemID) { return readTotalResponsesByQuestionAndItem(questionID, itemID); } 
+    
+    public static Response InsertResponse(int itemID, int questionID, int answerID, int count)
+    {
+    	// Inserts, then reads
+    	int newID = insertResponse(itemID, questionID, answerID, count);
+    	
+    	// If successful, immediately read the new Response
+    	if (newID != -1)
+    	{
+    		return GetResponse(newID);
+    	}
+    	// Otherwise, return null
+    	else
+    	{
+    		return null;
+    	}
+    }
+    
+    public static boolean UpdateResponseCount(int responseID, int count) { return updateResponseCount(responseID, count); }
+    
 	// Private functions
+    
+    /**
+     * Attempts to insert a new response record
+     * @param itemID Item key
+     * @param questionID Question key
+     * @param answerID Answer key
+     * @param count Count
+     * @return The ID of the new response record if successful; otherwise, -1.
+     */
+    private static int insertResponse(int itemID, int questionID, int answerID, int count)
+    {
+    	String query =
+                "INSERT INTO responses (itemID, questionID, answerID, count) " +
+                "VALUES (" + itemID + "," + questionID + "," + answerID + ", " + count + ")";
+    	
+		int newID = -1;
+
+		if (conn == null)
+			connectToDatabase();
+		try {
+
+			// STEP 4: Execute a query
+			stmt = conn.createStatement();
+			newID = stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+
+		} catch (SQLException se) {
+			// Handle errors for JDBC
+			se.printStackTrace();
+		} catch (Exception e) {
+			// Handle errors for Class.forName
+			e.printStackTrace();
+		}// end try
+		finally
+		{
+			closeConnection();
+		}
+		
+		return newID;    	
+    }
+    
     /**
      * Reads an Answer record from the database and returns
      * a corresponding Answer object
@@ -109,6 +196,30 @@ public class GameDB extends DatabaseInteractor {
 		return item;
 	}
 	
+	/**
+	 * Attempts to read all item data from the database
+	 * @return A list of Item objects
+	 */
+	private static List<Item> readItems()
+	{
+		ResultSet rs = DatabaseInteractor.readRecords("items");
+		List<Item> items = new ArrayList<Item>();
+		try
+		{
+			items = resultSetToItemList(rs);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+		}
+		finally
+		{
+			DatabaseInteractor.closeConnection();
+		}
+		
+		return items;
+	}
+	
 	private static Question readQuestion(int questionID)
 	{
 		Question question = null;
@@ -153,6 +264,79 @@ public class GameDB extends DatabaseInteractor {
 		return response;		
 	}
 	
+	/**
+	 * Attempts to read Response data from the database
+	 * @param itemID item key
+	 * @param questionID question key
+	 * @param answerID answer key
+	 * @return A Response item if successful; otherwise, null
+	 */
+	private static Response readResponseByCriteria(int itemID, int questionID, int answerID )
+	{
+		Response response = null;
+		
+		String query =
+				"SELECT * " +
+                "FROM	responses  " +
+                "WHERE  itemID = " + itemID + " " +
+                "AND    questionID = " + questionID + " " +
+                "AND    answerID = " + answerID;
+		
+		ResultSet rs = executeQuery(query);
+		
+		try
+		{
+			rs.first();
+			response = resultSetToResponse(rs);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * Attempts to read the total number of responses for a particular question/item combo from the database
+	 * @param questionID Question key
+	 * @param itemID Item key
+	 * @return The number of total responses for the specified question/item combo.
+	 */
+	private static int readTotalResponsesByQuestionAndItem(int questionID, int itemID)
+	{
+		int total = 0;
+				
+		String query =
+				"SELECT questionID, itemID, SUM( count ) AS total " +
+                "FROM	responses  " +
+                "WHERE  questionID = " + questionID + " " +
+                "AND    itemID = " + itemID + " " +
+                "GROUP BY questionID, itemID";
+		
+		ResultSet rs = executeQuery(query);
+		
+		try
+		{
+			rs.first();
+			total = rs.getInt("total");
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+		return total;		
+	}
+	
 	// Attempts to create an Answer object from a ResultSet
 	private static Answer resultSetToAnswer(ResultSet rs)
 	{
@@ -186,6 +370,31 @@ public class GameDB extends DatabaseInteractor {
 			System.err.println(e.getMessage());
 			return null;
 		}
+	}
+	
+	/**
+	 * Attempts to create a list of Items from a ResultSet
+	 * @param rs ResultSet containing rows of Item data
+	 * @return a List or Item objects
+	 */
+	private static List<Item> resultSetToItemList(ResultSet rs)
+	{
+		List<Item> items = new ArrayList<Item>();
+		
+		try
+		{
+			while (rs.next())
+			{
+				Item item = resultSetToItem(rs);
+				items.add(item);
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		return items;
 	}
 	
 	// Attempts to create a Question object from a ResultSet
@@ -223,4 +432,18 @@ public class GameDB extends DatabaseInteractor {
 			return null;
 		}
 	}	
+
+	private static boolean updateResponseCount(int responseID, int count)
+	{		
+        String query =
+				"UPDATE responses " +
+                "SET	count = " + count + " " +
+                "WHERE  responseID = " + responseID;
+		
+        ResultSet rs = executeQuery(query, true);
+
+        // There's not a way to check for failure at this point, since we don't
+        // forward exceptions
+		return true;		
+	}
 }

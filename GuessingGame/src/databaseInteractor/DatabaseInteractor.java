@@ -121,6 +121,43 @@ public class DatabaseInteractor {
 	}
 
 	/**
+	 * Generic query execution. Allows any SQL query to be executed.
+	 * @param query query string
+	 * @param closeConnection flag controlling whether the connection is automatically closed after execution or not.
+	 * If true, the connection will be closed following execution; otherwise, the connection will remain open (and
+	 * need to be closed manually).
+	 * @return A ResultSet containing the results of the query.
+	 */
+	public static ResultSet executeQuery(String query, boolean closeConnection) {
+
+		ResultSet rs = null;
+
+		if (conn == null)
+			connectToDatabase();
+		try {
+
+			// STEP 4: Execute a query
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(query);
+
+		} catch (SQLException se) {
+			// Handle errors for JDBC
+			se.printStackTrace();
+		} catch (Exception e) {
+			// Handle errors for Class.forName
+			e.printStackTrace();
+		}// end try
+		finally
+		{
+			if (closeConnection)
+				closeConnection();
+		}
+
+		
+		return rs;
+	}	
+	
+	/**
 	 * Generic query execution. Allows any SQL query to be executed. 
 	 * @param query string.
 	 * @return A ResultSet containing the results of the query.
