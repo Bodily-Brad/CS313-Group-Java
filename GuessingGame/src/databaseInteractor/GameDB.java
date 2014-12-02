@@ -315,7 +315,6 @@ public class GameDB extends DatabaseInteractor {
 		}
 		
 		// Execute query
-		System.out.println("query: " + query + "\n");
 		ResultSet rs = executeQuery(query);
 		
 		try

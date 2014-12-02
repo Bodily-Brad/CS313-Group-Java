@@ -148,7 +148,7 @@ public class Game {
 		
 		// Try reading exclusions
 		// TODO: Add exclusion handling
-		List<Question> questions = GameDB.GetAllQuestions();
+		List<Question> questions = GameDB.GetAllQuestions(excludedQuestionIDs);
 		
 		if (questions.size() > 0)
 		{
