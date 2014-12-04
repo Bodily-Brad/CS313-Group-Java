@@ -71,11 +71,14 @@ public class Game {
 		// Brute Method
 		List<Item> items = GameDB.GetAllItems();
 		
-		ArrayList<Float> confidences = new ArrayList<Float>(items.size());
+		// Create a map of confidence values, by itemID
+		Map<Integer, Float> confidences = new HashMap<Integer, Float>();
 		
+		// Iterate through all items
 		for (Item item : items)
 		{			
-			confidences.set(item.getID(), 0.0f);
+			// Initial confidence is 0.0f
+			confidences.put(item.getID(), 0.0f);
 			
 			// Iterate through questions in answered questions array
 			Map<Integer, Integer> questionsAnswered = Game.getQuestionsAnswered(session);
@@ -85,6 +88,7 @@ public class Game {
 				int questionID = entry.getKey();
 				
 				float count = GameDB.GetResponseCount(item.getID(), questionID, answerID);
+				
 				float totalCount = GameDB.GetTotalResponsesByQuestionAndItem(questionID, item.getID());
 				float averageCount = totalCount / 4.0f;	// Hard set to 4 responses
 				
@@ -95,7 +99,7 @@ public class Game {
 				float newConf = confidences.get(item.getID());
 				newConf += increase;
 				
-				confidences.set(item.getID(), newConf);
+				confidences.put(item.getID(), newConf);
 			}
 		}
 		
@@ -103,12 +107,12 @@ public class Game {
 		int maxConfID = 0;
 		float maxConf = 0.0f;
 		
-		for (int i=0; i < confidences.size(); i++)
+		for (Map.Entry<Integer, Float> entry : confidences.entrySet())
 		{
-			if (confidences.get(i) > maxConf)
+			if (entry.getValue() > maxConf)
 			{
-				maxConf = confidences.get(i);
-				maxConfID = i;
+				maxConf = entry.getValue();
+				maxConfID = entry.getKey();
 			}
 		}
 		
@@ -125,7 +129,7 @@ public class Game {
 	public static void FinishGameCorrect(HttpSession session, int itemID)
 	{
 		Game.setGameState(session, GameState.FinishCorrect);
-		Game.RecordPlayerResponses(session, itemID);
+		//Game.RecordPlayerResponses(session, itemID);
 	}
 	
 	public static void FinishGameInCorrect(HttpSession session)

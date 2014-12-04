@@ -59,9 +59,12 @@ public class Play extends HttpServlet {
 			Game.RecordAnswer(session, questionID, answerID);
 		
 		// This code is duplicated in Start...
+		// (Start shouldn't be needed any longer)
 		int questionsRemaining = Game.getQuestionsLeft(session);
 		questionID = -1;
 		
+		// If we still have questions remaining
+		// get the next question ID
 		if (questionsRemaining > 0)
 		{
 			questionID = Game.GetRandomQuestionID(session);
@@ -90,18 +93,18 @@ public class Play extends HttpServlet {
 			List<Question> allQuestions = GameDB.GetAllQuestions();
 			request.setAttribute("allQuestions", allQuestions);
 			
-			request.getRequestDispatcher("/askQuestion.jsp").forward(request, response);			
+			request.getRequestDispatcher("/views/askQuestion.jsp").forward(request, response);			
 		}
 		else
 		{
 			// We're out of questions now
-			//int guessItemID = Game.AttemptSolve(session);
-			int guessItemID = 1;
+			int guessItemID = Game.AttemptSolve(session);
+			//int guessItemID = 1;
 			Item guessItem = GameDB.GetItem(guessItemID);
 			//String message = "I'm out of questions, sorry.";
 			
 			request.setAttribute("guessItem", guessItem);
-			request.getRequestDispatcher("/endGame.jsp").forward(request, response);				
+			request.getRequestDispatcher("/views/endGame.jsp").forward(request, response);				
 		}		
 	}
 

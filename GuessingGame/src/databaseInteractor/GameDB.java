@@ -35,6 +35,7 @@ public class GameDB extends DatabaseInteractor {
 	
 	public static List<Answer> GetAllAnswers() { return readAnswers(); }
 	public static List<Item> GetAllItems() { return readItems(); }
+	public static List<Item> GetAllItems(List<Integer> excludedKeys) { return readItems(excludedKeys); }
 	public static List<Question> GetAllQuestions() { return readQuestions(); }
 	public static List<Question> GetAllQuestions(List<Integer> excludedKeys) { return readQuestions(excludedKeys); }
 	
@@ -54,7 +55,11 @@ public class GameDB extends DatabaseInteractor {
 	public static int GetResponseCount(int itemID, int questionID, int answerID)
 	{
 		Response response = readResponseByCriteria(itemID, questionID, answerID);
-		return response.getCount();
+
+		if (response != null)				
+			return response.getCount();
+		// Else
+		return 0;
 	}
 	
     public static int GetItemIDWithLowestResponseCount()
@@ -162,6 +167,8 @@ public class GameDB extends DatabaseInteractor {
 		}
 		catch (Exception e)
 		{
+			System.err.println("GameDB.readAnswer(int answerID)");
+			System.err.println("answerID: " + answerID);
 			System.err.println(e.getMessage());
 		}
 		finally
@@ -210,7 +217,9 @@ public class GameDB extends DatabaseInteractor {
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.getMessage());
+			System.err.println("GameDB.readItem(int itemID)");
+			System.err.println("itemID: " + itemID);			
+			System.err.println(e.getMessage());			
 		}
 		finally
 		{
@@ -233,6 +242,7 @@ public class GameDB extends DatabaseInteractor {
 		}
 		catch (Exception e)
 		{
+			System.err.println("GameDB.readItems()");			
 			System.err.println(e.getMessage());
 		}
 		finally
@@ -241,6 +251,54 @@ public class GameDB extends DatabaseInteractor {
 		}
 		
 		return items;
+	}
+	
+	private static List<Item> readItems(List<Integer> excludedKeys)
+	{
+		List<Item> items = new ArrayList<Item>();
+		
+		String query =
+				"SELECT * " +
+                "FROM	items";
+		
+		// add clause for excluded keys, if necessary
+		if (!excludedKeys.isEmpty())
+		{
+			query += " WHERE itemID NOT IN (";
+			for (int i = 0; i < excludedKeys.size(); i++)
+			{
+				int key = excludedKeys.get(i);
+				query += key;
+				
+				if ((excludedKeys.size() > 1) &&
+					(i < excludedKeys.size() - 1))
+					query += ", ";
+			}
+			query += ")";
+		}
+		
+		// Add order by
+		query += " ORDER BY description";
+		
+		// Execute query
+		ResultSet rs = executeQuery(query);
+		
+		try
+		{
+			items = resultSetToItemList(rs);
+		}
+		catch (Exception e)
+		{
+			System.err.println("GameDB.readItems(List<Integer> excludedKeys)");
+			System.err.println("excludedKeys: " + excludedKeys.toString());			
+			System.err.println(e.getMessage());
+		}
+		finally
+		{
+			closeConnection();
+		}
+		
+		return items;			
 	}
 	
 	private static Question readQuestion(int questionID)
@@ -255,6 +313,8 @@ public class GameDB extends DatabaseInteractor {
 		}
 		catch (Exception e)
 		{
+			System.err.println("GameDB.readQuestion(int questionID)");
+			System.err.println("questionID: " + questionID);				
 			System.err.println(e.getMessage());
 		}
 		finally
@@ -275,6 +335,7 @@ public class GameDB extends DatabaseInteractor {
 		}
 		catch (Exception e)
 		{
+			System.err.println("GameDB.readQuestions()");			
 			System.err.println(e.getMessage());
 		}
 		finally
@@ -323,6 +384,8 @@ public class GameDB extends DatabaseInteractor {
 		}
 		catch (Exception e)
 		{
+			System.err.println("GameDB.readQuestions(List<Integer> excludedKeys)");
+			System.err.println("excludedKeys: " + excludedKeys.toString());			
 			System.err.println(e.getMessage());
 		}
 		finally
@@ -345,6 +408,8 @@ public class GameDB extends DatabaseInteractor {
 		}
 		catch (Exception e)
 		{
+			System.err.println("GameDB.readResponse(int responseID)");
+			System.err.println("responseID: " + responseID);				
 			System.err.println(e.getMessage());
 		}
 		finally
@@ -381,8 +446,8 @@ public class GameDB extends DatabaseInteractor {
 			response = resultSetToResponse(rs);
 		}
 		catch (Exception e)
-		{
-			System.err.println(e.getMessage());
+		{		
+			System.out.println(e.getMessage());
 		}
 		finally
 		{
@@ -418,7 +483,7 @@ public class GameDB extends DatabaseInteractor {
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.getMessage());
+			// If response combo doesn't exist, total remains 0
 		}
 		finally
 		{

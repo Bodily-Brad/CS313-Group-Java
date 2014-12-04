@@ -179,6 +179,8 @@ public class DatabaseInteractor {
 			se.printStackTrace();
 		} catch (Exception e) {
 			// Handle errors for Class.forName
+			System.err.println("DatabaseInteractor.executeQuery(String query)");
+			System.err.println("query: " + query);			
 			e.printStackTrace();
 		}// end try
 
@@ -193,7 +195,7 @@ public class DatabaseInteractor {
 	 * on OpenShift.
 	 */
 	public static void closeConnection() {
-		try {
+		try {			
 			if (stmt != null)
 				stmt.close();
 		} catch (SQLException se2) {
@@ -203,9 +205,9 @@ public class DatabaseInteractor {
 				conn.close();
 				conn = null;
 			}
-		} catch (SQLException se) {
+		} catch (SQLException se) {			
 			se.printStackTrace();
-		}// end try
+		}// end try		
 	}
 	
 	protected static ResultSet readRecord(String tableName, String keyName, int key)
