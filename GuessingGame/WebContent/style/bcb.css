@@ -1,0 +1,270 @@
+@import url(http://fonts.googleapis.com/css?family=Lato|Poiret+One|Oswald);
+
+html {
+    background-color: #126173;
+    font-family: 'Lato', sans-serif;
+}
+
+body {
+    background-color: #fafafa;
+    color: #0c0d0d;
+    width: 50em;
+    margin: 0 auto;
+    margin-top: 0.25em;
+    padding: 1.0em;
+    border-radius: 1.0em;
+    box-shadow: 2px 5px 0px #000000;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Oswald', sans-serif;
+}
+
+h1 {
+    color: #126173;
+    
+}
+h2, h3, h4, h5 {
+    color: #498ba6;
+}
+
+a {
+    color: #027373;
+}
+
+a:visited {
+    color: #498ba6;
+}
+
+a:hover {
+    color: #126173;
+}
+
+header {
+    font-family: 'Poiret One', cursive;
+}
+
+
+header img {
+    max-width: 48px;
+}
+
+header nav {
+    background-color: #498ba6;
+    color: #fafafa;
+    text-transform: uppercase;
+    border-radius: 0.5em;
+}
+
+header nav a,
+header nav a:active,
+header nav a:hover,
+header nav a:visited {
+    text-decoration: none;
+    color: #fafafa;
+}
+
+header nav ul {
+    font-size: 1.5em;
+}
+
+header nav ul li {
+    display: inline-block;
+    padding: 0.35em;
+    margin: 0.15em;
+}
+
+header nav ul li {
+
+}
+
+header nav ul li:hover {
+    color: #ffffff;
+    background-color: #027373;
+    border-radius: 0.5em;
+}
+
+header nav ul li:hover a {
+    color: #fafafa;
+}
+
+footer {
+    text-align: center;
+}
+
+form label {
+    margin-right: 1em;
+}
+
+tr:nth-child(even) {
+    background-color: #d1e2e9;
+}
+
+.banner {
+    display: inline-block;
+    font-size: 2em;
+}
+
+.centered {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.error {
+    color: #ff0000;
+}
+
+.gameFrame {
+    display: block;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 0em;
+    border: 1px solid #000000;
+    border-radius: 0.5em;
+    background-color: #126173;
+    text-align: center;
+}
+
+.gameQuestion {
+    margin: 0.5em auto;
+    width: 85%;
+    text-align: center;
+    font-family: 'Oswald', sans-serif;
+    font-weight: bold;
+    font-size: 1.75em;
+}
+
+.gameUserInputArea {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0.25em 0 1em 0;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.gameButtonArea {
+    width: 35em;
+    margin: 0 auto;
+    text-align: center;
+}
+.gameNote {
+    text-align: center;
+    margin: 0;
+    padding: 0.5em;
+    color: #ffffff;
+}
+
+.gameInstructions {
+    width: 95%;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+.gameItemList ul {
+    list-style-type: none;
+    width: 95%;
+    margin: 0 auto;
+    padding: 1em;
+    text-align: left;
+}
+
+.gameItemList ul li {
+    display: inline-block;
+    margin: 0.2em 1em;
+    padding: 0.1em;
+    padding-left: 0.5em;
+    padding-bottom: 0.2em;
+    min-width: 7.5em;
+    text-align: left;
+    border-radius: 0.5em;
+    background-color: #d1e2e9;
+}
+
+.gameNote a,
+.gameNote a:visited,
+.gameNote a:active {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.gameNote a:hover {
+    text-decoration: underline;
+}
+
+form.gameUserInput input {
+    min-width: 10em;
+    margin: 0.25em;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.25em;
+}
+
+form.gameUserInput input[type=radio] {
+    min-width: 1em;
+    padding-left: 0;
+    margin: 0;
+}
+
+.poll {
+    display: block;
+    margin: 0 auto;
+    padding: 0 0.5em;
+    padding-bottom: 0.5em;
+    max-width: 30em;
+    border-radius: 0.5em;
+    border-color: #498ba6;
+    border: 2px solid #498ba6;
+    background-color: #fafafa;
+}
+
+.poll h2 {
+    display: block;
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    border-bottom: 1px solid #498ba6;
+}
+
+.poll h2>span {
+    display: block;
+    font-size: 0.75em;
+    font-weight: normal;
+}
+
+.poll h3 {
+    display: block;
+    margin: 0;
+    margin-top: 0.5em;
+    padding: 0;
+}
+
+.poll label {
+    display: block;
+    margin: 0;
+}
+
+.poll label>span {
+    float: left;
+    text-align: right;
+    width: 9em;
+    padding-right: 1em;
+}
+
+.poll .button {
+    margin: 0 0.25em;
+    padding: 0.5em;
+    color: #fafafa;
+    background: #498ba6;
+    border: none;
+    border-radius: 0.25em;
+    box-shadow: 1px 2px 0px #000000;
+}
+
+.poll input[type="radio"] {
+    margin-left: 1em;
+    margin-right: 0.5em;
+}
+
+.poll .button:hover {
+    background: #027373;
+}
