@@ -1,4 +1,4 @@
-package MapAutomator;
+package guessingGame;
 
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import MapAutomator.model.FileLocationHandler;
+import models.Location;
 
 
 /**
@@ -38,15 +38,31 @@ public class SaveLocation extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	String dataDirectory = System.getenv("OPENSHIFT_DATA_DIR");
 		
 		// Get Location Data 
-		String location = request.getParameter("locationData");
+		//String location = request.getParameter("locationData");
+		String latitudeS = request.getParameter("latitude");
+		String longitudeS = request.getParameter("longitude");
 
-
-		FileLocationHandler handler = new FileLocationHandler(dataDirectory + "locations.txt");
-		handler.addLocation(location);
+		double latitude = 0.0;
+		double longitude = 0.0;
 		
+		if (latitudeS != null)
+			latitude = Double.parseDouble(latitudeS);
+		
+		if (longitudeS != null)
+			longitude = Double.parseDouble(longitudeS);
+		
+		// Make sure we're good (no nulls) before we try
+		// to save
+		if ((latitudeS != null) && (longitudeS != null))
+		{
+			Location location = new Location(latitude, longitude);
+			
+			// TODO: Add DB Save
+		}
+
+		// Call ShowLocations Servlet
 		response.sendRedirect("ShowLocations");
 
 	}
