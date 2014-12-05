@@ -8,6 +8,7 @@ import java.util.List;
 
 import models.Answer;
 import models.Item;
+import models.Location;
 import models.Question;
 import models.Response;
 
@@ -36,6 +37,7 @@ public class GameDB extends DatabaseInteractor {
 	public static List<Answer> GetAllAnswers() { return readAnswers(); }
 	public static List<Item> GetAllItems() { return readItems(); }
 	public static List<Item> GetAllItems(List<Integer> excludedKeys) { return readItems(excludedKeys); }
+	public static List<Location> GetAllLocations() { return readLocations(); }
 	public static List<Question> GetAllQuestions() { return readQuestions(); }
 	public static List<Question> GetAllQuestions(List<Integer> excludedKeys) { return readQuestions(excludedKeys); }
 	
@@ -301,6 +303,27 @@ public class GameDB extends DatabaseInteractor {
 		return items;			
 	}
 	
+	private static List<Location> readLocations()
+	{
+		ResultSet rs = DatabaseInteractor.readRecords("userscores", "userScoreID");
+		List<Location> locations = new ArrayList<Location>();
+		try
+		{
+			locations = resultSetToLocationList(rs);
+		}
+		catch (Exception e)
+		{
+			System.err.println("GameDB.readLocations()");			
+			System.err.println(e.getMessage());
+		}
+		finally
+		{
+			DatabaseInteractor.closeConnection();
+		}
+		
+		return locations;		
+	}
+	
 	private static Question readQuestion(int questionID)
 	{
 		Question question = null;
@@ -542,7 +565,6 @@ public class GameDB extends DatabaseInteractor {
 		}
 		catch (Exception e)
 		{
-			System.err.println("here");
 			System.err.println(e.getMessage());
 			return null;
 		}
@@ -571,6 +593,42 @@ public class GameDB extends DatabaseInteractor {
 		}
 		
 		return items;
+	}
+	
+	private static Location resultSetToLocation(ResultSet rs)
+	{
+		try
+		{
+			return new Location(
+					rs.getDouble("latitude"),
+					rs.getDouble("longitude")
+					);		
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+			return null;
+		}
+	}	
+	
+	private static List<Location> resultSetToLocationList(ResultSet rs)
+	{
+		List<Location> locations = new ArrayList<Location>();
+		
+		try
+		{
+			while (rs.next())
+			{
+				Location location = resultSetToLocation(rs);
+				locations.add(location);
+			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		return locations;		
 	}
 	
 	// Attempts to create a Question object from a ResultSet
