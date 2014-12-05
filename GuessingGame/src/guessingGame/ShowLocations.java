@@ -1,6 +1,8 @@
-package MapAutomator;
+package guessingGame;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,8 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import MapAutomator.model.FileLocationHandler;
-import MapAutomator.model.LocationDataHandler;
+import models.Location;
+import databaseInteractor.GameDB;
 
 
 /**
@@ -33,13 +35,18 @@ public class ShowLocations extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// Get locations from DB
-
+		List<Location> locations = GameDB.GetAllLocations();
 
 		// Convert array of locations to an array of formatted strings
+		List<String> locationStrings = new ArrayList<String>();
+		for (Location location : locations)
+			locationStrings.add(location.toString());
 		
-		request.setAttribute("locations", locations);
+		// Pass location strings to view
+		request.setAttribute("locations", locationStrings);
 		
-        request.getRequestDispatcher("/views/showMap.jsp").forward(request,response);	}
+		// Show showMap view
+        request.getRequestDispatcher("/views/showMap.jsp").forward(request,response); }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
