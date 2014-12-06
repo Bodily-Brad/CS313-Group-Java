@@ -1,4 +1,4 @@
-package MapAutomator;
+package guessingGame;
 
 
 import java.io.IOException;
@@ -8,8 +8,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import MapAutomator.model.FileLocationHandler;
 
 
 /**
@@ -44,8 +42,8 @@ public class SaveLocation extends HttpServlet {
 		String location = request.getParameter("locationData");
 
 
-		FileLocationHandler handler = new FileLocationHandler(dataDirectory + "locations.txt");
-		handler.addLocation(location);
+		// FileLocationHandler handler = new FileLocationHandler(dataDirectory + "locations.txt");
+		// handler.addLocation(location);
 		
 		response.sendRedirect("ShowLocations");
 
