@@ -52,11 +52,11 @@ public class ConfirmGuess extends HttpServlet {
 		Game.FinishGameCorrect(session, itemID);
 		
 		// Set Message
-		String message = "Wow... I can't believe I guessed right.";
-		request.setAttribute("message", message);
+		//String message = "Wow... I can't believe I guessed right.";
+		//request.setAttribute("message", message);
 		
-		// Show finishGame view
-		request.getRequestDispatcher("/views/finishGame.jsp").forward(request, response);
+		// Show currentLocation view
+		request.getRequestDispatcher("/views/currentLocation.jsp").forward(request, response);
 		
 	}
 

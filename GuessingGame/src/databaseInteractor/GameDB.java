@@ -90,6 +90,11 @@ public class GameDB extends DatabaseInteractor {
 	
     public static int GetTotalResponsesByQuestionAndItem(int questionID, int itemID) { return readTotalResponsesByQuestionAndItem(questionID, itemID); } 
     
+    public static void InsertLocation(Location location)
+    {
+    	int newID = insertLocation(location);
+    }
+    
     public static Response InsertResponse(int itemID, int questionID, int answerID, int count)
     {
     	// Inserts, then reads
@@ -110,6 +115,36 @@ public class GameDB extends DatabaseInteractor {
     public static boolean UpdateResponseCount(int responseID, int count) { return updateResponseCount(responseID, count); }
     
 	// Private functions
+    private static int insertLocation(Location location)
+    {
+    	String query =
+                "INSERT INTO locations (latitude, longitude) " +
+                "VALUES (" + location.getLatitude() + "," + location.getLongitude() + ")";
+    	
+		int newID = -1;
+
+		if (conn == null)
+			connectToDatabase();
+		try {
+
+			// STEP 4: Execute a query
+			stmt = conn.createStatement();
+			newID = stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+
+		} catch (SQLException se) {
+			// Handle errors for JDBC
+			se.printStackTrace();
+		} catch (Exception e) {
+			// Handle errors for Class.forName
+			e.printStackTrace();
+		}// end try
+		finally
+		{
+			closeConnection();
+		}
+		
+		return newID;      	
+    }
     
     /**
      * Attempts to insert a new response record
@@ -305,7 +340,7 @@ public class GameDB extends DatabaseInteractor {
 	
 	private static List<Location> readLocations()
 	{
-		ResultSet rs = DatabaseInteractor.readRecords("userscores", "userScoreID");
+		ResultSet rs = DatabaseInteractor.readRecords("locations", "locationID");
 		List<Location> locations = new ArrayList<Location>();
 		try
 		{

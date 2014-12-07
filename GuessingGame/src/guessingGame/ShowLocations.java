@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Game;
 import models.Location;
 import databaseInteractor.GameDB;
 
@@ -20,6 +21,8 @@ import databaseInteractor.GameDB;
 @WebServlet("/ShowLocations")
 public class ShowLocations extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final GameDB gameDB = new GameDB();  // Need to initialize static object, but will call with GameDB
+	private static final Game game = new Game();		// Need to initialize static object, but will call with Game	
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -36,14 +39,13 @@ public class ShowLocations extends HttpServlet {
 		
 		// Get locations from DB
 		List<Location> locations = GameDB.GetAllLocations();
-
-		// Convert array of locations to an array of formatted strings
-		List<String> locationStrings = new ArrayList<String>();
-		for (Location location : locations)
-			locationStrings.add(location.toString());
 		
 		// Pass location strings to view
-		request.setAttribute("locations", locationStrings);
+		request.setAttribute("locations", locations);
+		
+		// Pass message to view
+		String message = "See where games have been played from.";
+		request.setAttribute("message", message);
 		
 		// Show showMap view
         request.getRequestDispatcher("/views/showMap.jsp").forward(request,response); }

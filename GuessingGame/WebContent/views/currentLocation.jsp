@@ -1,9 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
-<head>
-<title>Get Location</title>
+<jsp:include page="/includes/_head.html"/>
+<body>
+	<div class='gameFrame'>
+		<div class='gameNote'>
+			Thank you for Playing
+		</div>
+        <div class='gameUserInputArea'>
+            <div class='gameInstructions'>
+				<c:if test="${message != null && !message.isEmpty()}">
+					<p>${requestScope.message}</p>
+				</c:if>
+				<div class='gameQuestion'>Can we record your current location on our games played map?</div>
+				<div class='gameButtonArea'>
+					<input type="button" value="Yes" onclick="saveLocation()">
+					<input type="button" value="No" onclick="forward()">
+				</div>				
+				<form action="SaveLocation" method="Post"  id ="form" style="">
+					<input type="text" name="latitude" id="latitude"><br>
+					<input type="text" name="longitude" id="longitude"><br>
+					<input type="submit" value="submit">
+				</form>
+            </div>           
+        </div>
+        <div class='gameNote'><a href="NewGame">Play Again</a></div>
+	</div>
 	<script>
 		function saveLocation()
 		{
@@ -22,22 +46,9 @@
 		
 		function forward()
 		{
-			window.location = "../ShowLocations";
+			window.location = "ShowLocations";
 		}
 		
-	</script>
-</head>
-<body>
-	<h1>Do you want to add your current location?</h1>
-	
-	<input type="button" value="Yes" onclick="saveLocation()">
-	<input type="button" value="No" onclick="forward()"><br>
-	
-	<form action="../SaveLocation" method="Post"  id ="form" style="display:none">
-			<input type="text" name="latitude" id="latitude"><br>
-			<input type="text" name="longitude" id="longitude"><br>
-		<input type="submit" value="Login">
-	 </form>
-	  
+	</script>	  
 </body>
 </html>

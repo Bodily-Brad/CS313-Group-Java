@@ -61,9 +61,9 @@ public class ProvideCorrectItem extends HttpServlet {
 		// Get all items for newGame view
 		List<Item> items = GameDB.GetAllItems();
 		
-		// Show newGame view
-		request.setAttribute("items", items);
-		request.getRequestDispatcher("/views/newGame.jsp").forward(request, response);
+		// Show currentLocation view
+		//request.setAttribute("items", items);
+		request.getRequestDispatcher("/views/currentLocation.jsp").forward(request, response);
 	}
 
 }
