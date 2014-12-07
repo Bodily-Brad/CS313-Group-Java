@@ -19,7 +19,7 @@
 					<input type="button" value="Yes" onclick="saveLocation()">
 					<input type="button" value="No" onclick="forward()">
 				</div>				
-				<form action="SaveLocation" method="Post"  id ="form" style="">
+				<form action="SaveLocation" method="Post"  id ="form" style="display: none">
 					<input type="text" name="latitude" id="latitude"><br>
 					<input type="text" name="longitude" id="longitude"><br>
 					<input type="submit" value="submit">
