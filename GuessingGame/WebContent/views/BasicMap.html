@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script
+	src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCrkJAZZAeEnD90ThXYsfaEgbjW0NQ6XTQ&amp;sensor=true"
+	type="text/javascript">
+	
+</script>
+<script
+	src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/geolocationmarker/src/geolocationmarker-compiled.js"
+	type="text/javascript"></script>
+
+<script type="text/javascript">
+function initialize()
+{
+var mapProp = {
+  center:new google.maps.LatLng(51.508742,-0.120850),
+  zoom:5,
+  mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+var map=new google.maps.Map(document.getElementById("googleMap")
+  ,mapProp);
+  
+GeoMarker = new GeolocationMarker();
+GeoMarker.setCircleOptions({fillColor : '#808080'});
+
+var container = document.getElementById("container");
+var input = document.createElement("input");
+input.setAttribute("type", "text");
+input.setAttribute("name", "locationData");
+input.setAttribute("value", "Copy Position Here");
+container.appendChild(input);
+container.appendChild(document.createElement("br"));
+
+google.maps.event.addListenerOnce(GeoMarker, 'position_changed',
+				function() {
+	document.getElementById("location").innerHTML = this.getPosition();
+					map.setCenter(this.getPosition());
+					map.fitBounds(this.getBounds());
+				});
+				
+
+google.maps.event.addListener(
+				GeoMarker,
+				'geolocation_error',
+				function(e) {
+					alert('There was an error obtaining your position. Message: '
+							+ e.message);
+				});
+
+GeoMarker.setMap(map);
+
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<meta charset="US-ASCII">
+<title>Basic Google Maps Demonstration</title>
+</head>
+<body>
+
+	<div id="googleMap" style="width: 500px; height: 380px;"></div>
+
+<h1>Your current location is: <div id = "location"></div></h1>
+<form method="POST" action="SaveLocation">
+<div id ="container"></div>
+     <input type="submit" value="Save Current Location" />
+</form>
+
+<a href="ShowLocations">See previous user locations</a>
+
+</body>
+</html>

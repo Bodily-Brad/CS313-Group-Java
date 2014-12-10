@@ -15,7 +15,7 @@
 					<p>${requestScope.message}</p>
 				</c:if>
 				<div class='gameQuestion'>Can we record your current location on our games played map?</div>
-				<div class='gameQuestion'>(Your browser may prompt you to access to location services, clicking Allow will let us mark another pin on our map.)</div>
+				<div class='gameInstructions'>(Your browser may prompt you to access to location services, clicking Allow will let us mark another pin on our map.)</div>
 				<div class='gameButtonArea'>
 					<input type="button" value="Yes" onclick="saveLocation()">
 					<input type="button" value="No" onclick="forward()">
